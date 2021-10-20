@@ -1,0 +1,12 @@
+<Context>
+
+  <Resources>
+    <PreResources
+      className="org.apache.catalina.webresources.DirResourceSet"
+      base="${catalina.base}/conf/inventory/client"
+      internalPath="/"
+      webAppMount="/WEB-INF/classes"
+      />
+  </Resources>
+  
+</Context>

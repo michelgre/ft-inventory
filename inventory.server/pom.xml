@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <parent>
+    <groupId>pers.mr.ft</groupId>
+    <artifactId>inventory</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../inventory</relativePath>
+  </parent>
+
+  <artifactId>inventory.server</artifactId>
+
+  <name>Inventory Server</name>
+
+  <repositories>
+      <repository>
+          <id>local-maven-repo</id>
+          <url>file:///${project.basedir}/local-maven-repo</url>
+      </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <artifactId>org.eclipse.scout.rt.server</artifactId>
+      <groupId>org.eclipse.scout.rt</groupId>
+    </dependency>
+    <dependency>
+      <groupId>pers.mr.ft</groupId>
+      <artifactId>inventory.shared</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>pers.mr.ft</groupId>
+      <artifactId>ftdb-sync</artifactId>
+      <version>1.0.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20200518</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.scout.rt</groupId>
+      <artifactId>org.eclipse.scout.rt.server.jdbc</artifactId>
+    </dependency>
+	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>42.2.18</version>
+      <exclusions></exclusions>
+	</dependency>
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports</artifactId>
+      <version>6.16.0</version>
+      <exclusions>
+        <exclusion>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports-functions</artifactId>
+      <version>6.16.0</version>
+      <exclusions>
+        <exclusion>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports-fonts</artifactId>
+      <version>6.16.0</version>
+      <exclusions>
+        <exclusion>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.scout.rt</groupId>
+      <artifactId>org.eclipse.scout.rt.server.test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>pers.mr.ft</groupId>
+      <artifactId>barcode-fonts</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>3.4.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>javase</artifactId>
+        <version>3.4.1</version>
+    </dependency>
+
+  </dependencies>
+  
+</project>

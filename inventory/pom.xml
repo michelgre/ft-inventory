@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.eclipse.scout</groupId>
+    <artifactId>maven_rt_plugin_config-master</artifactId>
+    <version>3.12.2</version>
+    <relativePath />
+  </parent>
+
+  <groupId>pers.mr.ft</groupId>
+  <artifactId>inventory</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Inventory Parent Module</name>
+
+  <properties>
+    <pers.mr.ft.inventory.version>${project.version}</pers.mr.ft.inventory.version>
+    <jdk.source.version>8</jdk.source.version>
+    <org.eclipse.scout.rt.version>10.0.0-SNAPSHOT</org.eclipse.scout.rt.version>
+    <master_npm_release_dependency_mapping>--mapping.0.regex=@eclipse-scout --mapping.0.version=${org.eclipse.scout.rt.version}</master_npm_release_dependency_mapping>
+    <tomcat.dir>//QNAP251/Public/Tomcat/tomcat8</tomcat.dir>
+  </properties>
+
+  <modules>
+    <module>../inventory.shared</module>
+    <module>../inventory.server</module>
+    <module>../inventory.client</module>
+    <module>../inventory.server.app.war</module>
+    <module>../inventory.ui.html</module>
+    <module>../inventory.ui.html.app.war</module>
+  </modules>
+  
+  <!-- NE MARCHE PAS Installation sur qnap
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>tomcat-deploy</id>
+            <phase>deploy</phase>
+            <configuration>
+              <tasks>
+                <echo>Installation sur Qnap</echo>
+                <copy file="../inventory.server.app.war/dist/inventory-server-${project.version}.war" tofile="${tomcat.dir}/webapps/inventory-server.war"/>
+                <copy file="../inventory.ui.html.app.war/dist/inventory-${project.version}.war" tofile="${tomcat.dir}/webapps/inventory.war"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+   -->
+  
+  <dependencyManagement>
+    <dependencies>
+      <!-- Scout Dependencies -->
+      <dependency>
+        <groupId>org.eclipse.scout.rt</groupId>
+        <artifactId>org.eclipse.scout.rt</artifactId>
+        <version>${org.eclipse.scout.rt.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <!-- Application Dependencies -->
+      <dependency>
+        <groupId>pers.mr.ft</groupId>
+        <artifactId>inventory.client</artifactId>
+        <version>${pers.mr.ft.inventory.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>pers.mr.ft</groupId>
+        <artifactId>inventory.shared</artifactId>
+        <version>${pers.mr.ft.inventory.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>pers.mr.ft</groupId>
+        <artifactId>inventory.server</artifactId>
+        <version>${pers.mr.ft.inventory.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>pers.mr.ft</groupId>
+        <artifactId>inventory.ui.html</artifactId>
+        <version>${pers.mr.ft.inventory.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>

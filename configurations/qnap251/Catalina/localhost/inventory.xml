@@ -1,0 +1,12 @@
+<Context>
+
+  <Resources>
+    <PreResources
+      className="org.apache.catalina.webresources.DirResourceSet"
+      base="/share/CACHEDEV1_DATA/.qpkg/Tomcat8/tomcat8/conf/inventory/client"
+      internalPath="/"
+      webAppMount="/WEB-INF/classes"
+      />
+  </Resources>
+  
+</Context>

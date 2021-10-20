@@ -1,0 +1,77 @@
+/* Feuille de style pour développement (chargement direct depuis index.html) */
+/* A copier dans dist/res pour être actif immédiatement                      */
+
+div.form.box-form {
+	background-color: bisque;
+}
+
+div.form.box-form input {
+	background-color: #FEFEFE;
+}
+
+div.form.box-form textarea {
+	background-color: #FEFEFE;
+}
+
+div.part-form {
+	background-color: bisque;
+}
+
+div.part-form input {
+	background-color: #FEFEFE;
+}
+
+div.part-form textarea {
+	background-color: #FEFEFE;
+}
+
+.parts-table .table-row {
+	height: 60px;
+}
+
+.part-icon img {
+	height: 60px;	
+}
+
+div.part-icon {
+	padding-top: 0px;
+}
+
+.group-box-body {
+	padding-top: 4px;
+	padding-bottom: 0px;
+}
+
+.form-field label {
+	padding-top: 0px;
+}
+
+.detail-table.parts-page .table-data .table-row .table-cell {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.table-control-container {
+  height: 166px;
+}
+
+.table-cell.count-col.missing-parts {
+	background-color: #FFD991;
+}
+
+.table-cell.count-col.too-many-parts {
+	background-color: #E0FFE0;	
+}
+
+.fieldbox .group-box-title {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom: none;
+}
+
+.fieldbox .group-box-title .label {
+	font-size: 11;
+	font-weight: normal;
+}
