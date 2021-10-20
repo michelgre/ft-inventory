@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <title>Inventory</title>
     <scout:include template="includes/head.html" />
-    <scout:stylesheet src="inventory-theme.css" />
-    <scout:stylesheet src="inventory-dev.css" />
+    <scout:stylesheets entrypoint="inventory-theme"/>
+    <!-- <scout:stylesheets entrypoint="inventory-dev"/>-->
   </head>
   <body>
     <scout:include template="includes/no-script.html" />
     <div class="scout" data-partid="1"></div>
     <scout:version/>
-    <scout:script src="jquery.js"/>
-    <scout:script src="eclipse-scout.js"/>
-    <scout:script src="inventory.js"/>
+    <scout:scripts entrypoint="inventory"/>
   </body>
 </html>
