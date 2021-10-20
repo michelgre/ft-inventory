@@ -146,6 +146,7 @@ public class DocumentFormData extends AbstractFormData {
       public static final String id = "id";
       public static final String partNumber = "partNumber";
       public static final String count = "count";
+      public static final String FTDBCount = "FTDBCount";
       public static final String maxCount = "maxCount";
       public static final String kitCount = "kitCount";
       public static final String deltaCount = "deltaCount";
@@ -159,6 +160,7 @@ public class DocumentFormData extends AbstractFormData {
       private Long m_id;
       private String m_partNumber;
       private Integer m_count;
+      private Integer m_FTDBCount;
       private Integer m_maxCount;
       private Integer m_kitCount;
       private Integer m_deltaCount;
@@ -192,6 +194,14 @@ public class DocumentFormData extends AbstractFormData {
 
       public void setCount(Integer newCount) {
         m_count = newCount;
+      }
+
+      public Integer getFTDBCount() {
+        return m_FTDBCount;
+      }
+
+      public void setFTDBCount(Integer newFTDBCount) {
+        m_FTDBCount = newFTDBCount;
       }
 
       public Integer getMaxCount() {
