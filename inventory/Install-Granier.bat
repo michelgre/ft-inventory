@@ -15,6 +15,6 @@ FOR /f "delims=" %%i in ('dir "%ROOTDIR%inventory.ui.html.app.war\dist\*.war" /b
 ECHO Serveur: %SERVER_WAR%
 ECHO Client: %CLIENT_WAR%
 @ECHO ON
-XCOPY/Y "%ROOTDIR%inventory.server.app.war\dist\%SERVER_WAR%" "%WEBAPPS%"
-XCOPY/Y "%ROOTDIR%inventory.ui.html.app.war\dist\%CLIENT_WAR%" "%WEBAPPS%"
+XCOPY/Y "%ROOTDIR%inventory.server.app.war\dist\%SERVER_WAR%" "%WEBAPPS%\inventory-server.war"
+XCOPY/Y "%ROOTDIR%inventory.ui.html.app.war\dist\%CLIENT_WAR%" "%WEBAPPS%\inventory.war"
 PAUSE

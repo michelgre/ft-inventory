@@ -1,6 +1,7 @@
 package pers.mr.ft.inventory.client;
 
 import java.beans.PropertyChangeEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.security.AccessController;
 import java.security.Principal;
 import java.util.HashMap;
@@ -21,7 +22,6 @@ import org.eclipse.scout.rt.client.ui.desktop.AbstractDesktop;
 import org.eclipse.scout.rt.client.ui.desktop.OpenUriAction;
 import org.eclipse.scout.rt.client.ui.desktop.outline.AbstractOutlineViewButton;
 import org.eclipse.scout.rt.client.ui.desktop.outline.IOutline;
-import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.FormEvent;
 import org.eclipse.scout.rt.client.ui.form.FormListener;
 import org.eclipse.scout.rt.client.ui.form.ScoutInfoForm;
@@ -34,10 +34,14 @@ import org.eclipse.scout.rt.platform.util.StringUtility;
 
 import pers.mr.ft.inventory.client.Desktop.UserProfileMenu.ThemeMenu.DarkThemeMenu;
 import pers.mr.ft.inventory.client.Desktop.UserProfileMenu.ThemeMenu.DefaultThemeMenu;
+import pers.mr.ft.inventory.client.forms.AbstractDesktopForm;
 import pers.mr.ft.inventory.client.forms.BoxForm;
 import pers.mr.ft.inventory.client.forms.BoxTypeForm;
 import pers.mr.ft.inventory.client.forms.DocumentForm;
+import pers.mr.ft.inventory.client.forms.LocationForm;
 import pers.mr.ft.inventory.client.forms.PartForm;
+import pers.mr.ft.inventory.client.forms.ReportModelForm;
+import pers.mr.ft.inventory.client.forms.ShopForm;
 import pers.mr.ft.inventory.client.inventory.InventoryOutline;
 import pers.mr.ft.inventory.client.referential.ReferentialOutline;
 import pers.mr.ft.inventory.client.settings.SettingsOutline;
@@ -53,6 +57,9 @@ public class Desktop extends AbstractDesktop {
   private Map<Long,PartForm> partFormsById = new HashMap<>();
   private Map<Long,DocumentForm> documentFormsById = new HashMap<>();
   private Map<Long,BoxTypeForm> boxTypeFormsById = new HashMap<>();
+  private Map<Long,LocationForm> locationFormsById = new HashMap<>();
+  private Map<Long,ShopForm> shopFormsById = new HashMap<>();
+  private Map<Long,ReportModelForm> reportModelFormsById = new HashMap<>();
 
   private Set<Long> partsClipboard = new HashSet<>();
   
@@ -538,6 +545,55 @@ public class Desktop extends AbstractDesktop {
         
       });
       form.startModify();
+    }
+    else {
+      form.addFormListener(listener);
+      form.activate();
+    }
+
+    return form;
+  }
+
+  public LocationForm findLocationForm(Long objectId, FormListener listener) {
+    return findDesktopForm(LocationForm.class, locationFormsById, objectId, listener);
+  }
+  
+  public ShopForm findShopForm(Long objectId, FormListener listener) {
+    return findDesktopForm(ShopForm.class, shopFormsById, objectId, listener);
+  }
+  
+  public ReportModelForm findReportModelForm(Long objectId, FormListener listener) {
+    return findDesktopForm(ReportModelForm.class, reportModelFormsById, objectId, listener);
+  }
+  
+  public <T extends AbstractDesktopForm> T findDesktopForm(Class<T> clazz, Map<Long,T> mapById, Long objectId, FormListener listener) {
+    T form = mapById.get(objectId);
+    if (form!=null) {
+      if (form.isDisposeDone()) {
+        boxTypeFormsById.remove(objectId);
+        form = null;
+      }
+    }    
+    if (form==null) {
+      try {
+        form = clazz.getDeclaredConstructor().newInstance();
+        form.setObjectId(objectId);
+        mapById.put(objectId, form);
+        form.addFormListener(listener);
+        form.addFormListener(new FormListener() {
+          @Override
+          public void formChanged(FormEvent e) {
+            if (e.getType()==FormEvent.TYPE_DISCARDED) {
+              mapById.remove(objectId);
+            }
+          }
+          
+        });
+        form.startModify();
+      } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+          | NoSuchMethodException | SecurityException e1) {
+        e1.printStackTrace();//TODO ?
+      }
     }
     else {
       form.addFormListener(listener);

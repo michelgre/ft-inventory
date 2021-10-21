@@ -48,4 +48,10 @@ public class ReportModelService implements IReportModelService {
     }
     return reportParameters;
   }
+  @Override
+  public void delete(Long id) {
+    if (id > 0) {
+      SQL.delete("DELETE from report WHERE id = :id", new NVPair("id", id));
+    }
+  }
 }

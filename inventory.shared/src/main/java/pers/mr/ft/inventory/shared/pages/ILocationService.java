@@ -7,4 +7,5 @@ import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 @TunnelToServer
 public interface ILocationService extends IService {
   LocationTablePageData getLocationTableData(SearchFilter filter);
+  void delete(Long id);
 }

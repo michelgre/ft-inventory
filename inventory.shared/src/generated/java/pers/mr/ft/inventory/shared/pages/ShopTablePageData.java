@@ -53,15 +53,15 @@ public class ShopTablePageData extends AbstractTablePageData {
     public static final String id = "id";
     public static final String label = "label";
     public static final String query = "query";
-    private String m_id;
+    private Long m_id;
     private String m_label;
     private String m_query;
 
-    public String getId() {
+    public Long getId() {
       return m_id;
     }
 
-    public void setId(String newId) {
+    public void setId(Long newId) {
       m_id = newId;
     }
 

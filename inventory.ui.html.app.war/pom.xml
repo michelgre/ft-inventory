@@ -44,7 +44,6 @@
               <target>
                 <echo>Projet ${project.name}</echo>
                 <copy file="target/inventory-${project.version}.war" tofile="${basedir}/dist/inventory-${project.version}.war"/>
-                <copy file="target/inventory-${project.version}.war" tofile="${basedir}/dist/inventory.war"/>
                 <!-- 
                 <copy todir="${basedir}/dist/conf">
                   <fileset dir="conf-default"/>

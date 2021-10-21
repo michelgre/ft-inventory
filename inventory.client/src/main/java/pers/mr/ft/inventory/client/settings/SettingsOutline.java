@@ -8,6 +8,9 @@ import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.text.TEXTS;
 
 import pers.mr.ft.inventory.client.pages.BoxTypesTablePage;
+import pers.mr.ft.inventory.client.pages.LocationTablePage;
+import pers.mr.ft.inventory.client.pages.ReportModelTablePage;
+import pers.mr.ft.inventory.client.pages.ShopTablePage;
 import pers.mr.ft.inventory.shared.Icons;
 
 /**
@@ -30,5 +33,8 @@ public class SettingsOutline extends AbstractOutline {
     super.execCreateChildPages(pageList);
     
     pageList.add(new BoxTypesTablePage());
+    pageList.add(new LocationTablePage());
+    pageList.add(new ShopTablePage());
+    pageList.add(new ReportModelTablePage());
   }
 }

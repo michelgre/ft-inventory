@@ -27,6 +27,7 @@
         /*login*.js
         /*logout*.js
         /*inventory-theme*.css
+        /*inventory*.js
       </param-value>
     </init-param>
   </filter>

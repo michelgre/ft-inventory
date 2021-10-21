@@ -1,7 +1,6 @@
 package pers.mr.ft.inventory.client.forms;
 
 import org.eclipse.scout.rt.client.dto.FormData;
-import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractCancelButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
@@ -27,7 +26,7 @@ import pers.mr.ft.inventory.shared.forms.IBoxTypeService;
 import pers.mr.ft.inventory.shared.forms.UpdateBoxTypePermission;
 
 @FormData(value = BoxTypeFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
-public class BoxTypeForm extends AbstractForm {
+public class BoxTypeForm extends AbstractDesktopForm {
   private Long boxTypeId = 0L;
   
   @FormData
@@ -42,7 +41,6 @@ public class BoxTypeForm extends AbstractForm {
 
   @Override
   protected String getConfiguredTitle() {
-    // TODO [mreverbel] verify translation
     return TEXTS.get("BoxType");
   }
 

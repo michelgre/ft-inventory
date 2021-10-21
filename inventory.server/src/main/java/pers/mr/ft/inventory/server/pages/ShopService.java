@@ -16,4 +16,10 @@ public class ShopService implements IShopService {
         new NVPair("page", pageData));
     return pageData;
   }
+  @Override
+  public void delete(Long id) {
+    if (id > 0) {
+      SQL.delete("DELETE from shop WHERE id = :id", new NVPair("id", id));
+    }
+  }
 }

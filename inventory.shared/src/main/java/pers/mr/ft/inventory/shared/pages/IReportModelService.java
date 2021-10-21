@@ -13,4 +13,6 @@ public interface IReportModelService extends IService {
   ReportModelTablePageData getReportTableData(String type, SearchFilter filter);
   ReportModelTableRowData loadReportData(Long reportId);
   Map<String,String> getReportParameters(Long reportId);
+  void delete(Long id);
+
 }

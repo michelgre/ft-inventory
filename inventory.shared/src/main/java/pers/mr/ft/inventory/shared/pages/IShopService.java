@@ -7,4 +7,5 @@ import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 @TunnelToServer
 public interface IShopService extends IService {
   ShopTablePageData getShopTableData(SearchFilter filter);
+  void delete(Long id);
 }

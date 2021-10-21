@@ -44,6 +44,11 @@ public class BoxTypesTablePage extends AbstractPageWithTable<Table> {
   }
 
   @Override
+	protected boolean getConfiguredLeaf() {
+    return true;
+  }
+  
+  @Override
   protected void execLoadData(SearchFilter filter) {
     importPageData(BEANS.get(IBoxTypesService.class).getBoxTypesTableData(filter));
   }
