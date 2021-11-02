@@ -641,16 +641,16 @@ public class PartForm extends AbstractForm {
             MessageBoxes.createOk().withBody("Expérimental: dépôt de fichier").show();
             
             if (transferObject instanceof ResourceListTransferObject) {
-              List<BinaryResource> resources = ((ResourceListTransferObject) transferObject).getResources();
-  
-              if (!resources.isEmpty()) {
-                BinaryResource resource = CollectionUtility.firstElement(resources);
-                // if you want to work with buffered images
-                // BufferedImage bi = ImageIO.read(new FileInputStream(fileName[0]));
-                // setImage(bi);
-                setImage(resource.getContent());
-                setImageId(resource.getFilename());
+              List<Long> partsList = new LinkedList<>();
+              partsList.add(partId);
+              
+              ResourceListTransferObject rlto = (ResourceListTransferObject) transferObject;
+              for (BinaryResource document : rlto.getResources()) {
+                DocumentForm form = new DocumentForm();
+                form.startNew(document);
+                form.getPartsField().getTable().addParts(partsList);
               }
+              
             }
           }
   
