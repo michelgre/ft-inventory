@@ -20,8 +20,12 @@ public class PartsService implements IPartsService {
     String userLanguage = ServerSession.get().getSessionLanguage();
     String defaultLanguage =  ServerSession.get().getDefaultLanguage();
     
+    // Propriétaire
     FTPrincipal principal = ServerSession.get().getPrincipal();
-    Long userId = principal.getId();
+    Long userId = 0L;
+    if (principal!=null) {
+      userId = principal.getId();
+    }
     
     String cond = " WHERE 1=1 ";
     if (buildingKits) {

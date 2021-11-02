@@ -55,7 +55,10 @@ public class PartService implements IPartService {
     String defaultLanguage =  ServerSession.get().getDefaultLanguage();
     
     FTPrincipal principal = ServerSession.get().getPrincipal();
-    Long userId = principal.getId();
+    Long userId = 0L;
+    if (principal!=null) {
+      userId = principal.getId();
+    }
     
     // TODO icone
     // '/icons/?image=' || p.ft_icon, 
@@ -88,11 +91,11 @@ public class PartService implements IPartService {
         new NVPair("defaultLanguage", defaultLanguage));
     
     // Boîtes contenant
-    String boxesQuery = "SELECT b.id, b.label, bc.count, b.lot_achat " +
+    String boxesQuery = "SELECT b.id, b.label, bc.count, b.lot_achat, b.location_id " +
         " FROM box_contains bc " +
         " JOIN box b ON b.id = bc.container_id AND b.user_id = :userId " +
         " WHERE bc.part_id = :partId " + // AND NOT b.lot_achat
-        " INTO :{boxes.id}, :{boxes.label}, :{boxes.thisPartCount}, :{boxes.lotAchat} ";
+        " INTO :{boxes.id}, :{boxes.label}, :{boxes.thisPartCount}, :{boxes.lotAchat}, :{boxes.location} ";
     SQL.selectInto(boxesQuery, 
         formData, 
         new NVPair("userLanguage", userLanguage), 
