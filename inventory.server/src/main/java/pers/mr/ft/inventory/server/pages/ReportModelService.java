@@ -51,6 +51,7 @@ public class ReportModelService implements IReportModelService {
   @Override
   public void delete(Long id) {
     if (id > 0) {
+      SQL.delete("DELETE from report_parameter WHERE report_id = :id", new NVPair("id", id));
       SQL.delete("DELETE from report WHERE id = :id", new NVPair("id", id));
     }
   }

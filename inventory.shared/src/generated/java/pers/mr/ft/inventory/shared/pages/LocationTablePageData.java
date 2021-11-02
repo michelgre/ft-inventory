@@ -53,9 +53,11 @@ public class LocationTablePageData extends AbstractTablePageData {
     public static final String id = "id";
     public static final String location = "location";
     public static final String description = "description";
+    public static final String boxCount = "boxCount";
     private Long m_id;
     private String m_location;
     private String m_description;
+    private Integer m_boxCount;
 
     public Long getId() {
       return m_id;
@@ -79,6 +81,14 @@ public class LocationTablePageData extends AbstractTablePageData {
 
     public void setDescription(String newDescription) {
       m_description = newDescription;
+    }
+
+    public Integer getBoxCount() {
+      return m_boxCount;
+    }
+
+    public void setBoxCount(Integer newBoxCount) {
+      m_boxCount = newBoxCount;
     }
   }
 }

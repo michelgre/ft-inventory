@@ -10,6 +10,7 @@ import org.eclipse.scout.rt.client.ui.action.menu.IMenuType;
 import org.eclipse.scout.rt.client.ui.action.menu.TableMenuType;
 import org.eclipse.scout.rt.client.ui.basic.table.AbstractTable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
+import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractIntegerColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractStringColumn;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithTable;
 import org.eclipse.scout.rt.client.ui.form.FormEvent;
@@ -91,6 +92,19 @@ public class LocationTablePage extends AbstractPageWithTable<Table> {
         return 500;
       }
     }
+    @Order(4000)
+    public class BoxCountColumn extends AbstractIntegerColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("BoxCount");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 75;
+      }
+    }
+
     @Order(1000)
     public class EditMenu extends AbstractMenu {
       @Override

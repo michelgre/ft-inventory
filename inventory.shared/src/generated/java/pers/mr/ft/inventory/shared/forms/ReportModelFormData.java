@@ -2,7 +2,9 @@ package pers.mr.ft.inventory.shared.forms;
 
 import javax.annotation.Generated;
 
+import org.eclipse.scout.rt.shared.data.basic.table.AbstractTableRowData;
 import org.eclipse.scout.rt.shared.data.form.fields.AbstractValueFieldData;
+import org.eclipse.scout.rt.shared.data.form.fields.tablefield.AbstractTableFieldBeanData;
 
 /**
  * <b>NOTE:</b><br>
@@ -21,6 +23,10 @@ public class ReportModelFormData extends AbstractDesktopFormData {
     return getFieldByClass(Name.class);
   }
 
+  public Parameters getParameters() {
+    return getFieldByClass(Parameters.class);
+  }
+
   public StyleSheet getStyleSheet() {
     return getFieldByClass(StyleSheet.class);
   }
@@ -35,6 +41,78 @@ public class ReportModelFormData extends AbstractDesktopFormData {
 
   public static class Name extends AbstractValueFieldData<String> {
     private static final long serialVersionUID = 1L;
+  }
+
+  public static class Parameters extends AbstractTableFieldBeanData {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public ParametersRowData addRow() {
+      return (ParametersRowData) super.addRow();
+    }
+
+    @Override
+    public ParametersRowData addRow(int rowState) {
+      return (ParametersRowData) super.addRow(rowState);
+    }
+
+    @Override
+    public ParametersRowData createRow() {
+      return new ParametersRowData();
+    }
+
+    @Override
+    public Class<? extends AbstractTableRowData> getRowType() {
+      return ParametersRowData.class;
+    }
+
+    @Override
+    public ParametersRowData[] getRows() {
+      return (ParametersRowData[]) super.getRows();
+    }
+
+    @Override
+    public ParametersRowData rowAt(int index) {
+      return (ParametersRowData) super.rowAt(index);
+    }
+
+    public void setRows(ParametersRowData[] rows) {
+      super.setRows(rows);
+    }
+
+    public static class ParametersRowData extends AbstractTableRowData {
+      private static final long serialVersionUID = 1L;
+      public static final String id = "id";
+      public static final String name = "name";
+      public static final String value = "value";
+      private Long m_id;
+      private String m_name;
+      private String m_value;
+
+      public Long getId() {
+        return m_id;
+      }
+
+      public void setId(Long newId) {
+        m_id = newId;
+      }
+
+      public String getName() {
+        return m_name;
+      }
+
+      public void setName(String newName) {
+        m_name = newName;
+      }
+
+      public String getValue() {
+        return m_value;
+      }
+
+      public void setValue(String newValue) {
+        m_value = newValue;
+      }
+    }
   }
 
   public static class StyleSheet extends AbstractValueFieldData<String> {

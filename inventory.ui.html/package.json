@@ -1,6 +1,6 @@
 {
   "name": "@inventory/ui",
-  "version": "1.0.0-snapshot.20211021134901",
+  "version": "1.0.0-snapshot.20211102124020",
   "engines": {
     "node": ">=12.1.0",
     "npm": ">=6.9.0",
