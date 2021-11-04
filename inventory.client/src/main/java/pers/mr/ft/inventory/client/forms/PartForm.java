@@ -46,7 +46,6 @@ import org.eclipse.scout.rt.client.ui.form.fields.imagefield.AbstractImageField;
 import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.client.ui.form.fields.tablefield.AbstractTableField;
-import org.eclipse.scout.rt.client.ui.messagebox.MessageBoxes;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.resource.BinaryResource;
@@ -621,6 +620,11 @@ public class PartForm extends AbstractForm {
           }
           
           @Override
+          protected long getConfiguredDropMaximumSize() {
+            return 300 * 1024 * 1024;
+          }
+          
+          @Override
           public void setImageId(String imageId) {
             super.setImageId(imageId);
             
@@ -638,7 +642,7 @@ public class PartForm extends AbstractForm {
           protected void execDropRequest(TransferObject transferObject) {
             clearErrorStatus();
   
-            MessageBoxes.createOk().withBody("Expérimental: dépôt de fichier").show();
+            //MessageBoxes.createOk().withBody("Expérimental: dépôt de fichier").show();
             
             if (transferObject instanceof ResourceListTransferObject) {
               List<Long> partsList = new LinkedList<>();
@@ -1253,7 +1257,12 @@ public class PartForm extends AbstractForm {
           IMenu menu = new AbstractMenu() {
             @Override
             protected String getConfiguredText() {
-              return doc.getName();
+              String name = doc.getName();
+              String lang = doc.getLang();
+              if (lang!=null && !"".equals(lang) && !"-".equals(lang)) {
+                name = name + " ("+lang+")";
+              }
+              return name;
             }
             
             @Override

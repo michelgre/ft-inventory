@@ -116,7 +116,7 @@ public class PartService implements IPartService {
         new NVPair("defaultLanguage", defaultLanguage));
 
     // Documents
-    String docsQuery = "SELECT d.id, d.title " + 
+    String docsQuery = "SELECT d.id, d.title, d.language " + 
         " FROM document d " + 
         " WHERE " + 
         " d.id IN (SELECT doc_id FROM doc_part WHERE part_id = :partId) "
@@ -126,7 +126,8 @@ public class PartService implements IPartService {
     for (Object[] docData: docsData) {
       Long id = (Long) docData[0];
       String name = (String) docData[1];
-      Document doc = new Document(id, name);
+      String lang = (String) docData[2];
+      Document doc = new Document(id, name, lang);
       formData.getDocuments().add(doc);
     }
     

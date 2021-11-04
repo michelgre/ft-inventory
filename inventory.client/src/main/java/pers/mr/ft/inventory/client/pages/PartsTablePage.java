@@ -452,7 +452,7 @@ public class PartsTablePage extends AbstractPageWithTable<Table> {
     
     @Override
     protected long getConfiguredDropMaximumSize() {
-      return 100 * 1024 * 1024;
+      return 300 * 1024 * 1024;
     }
     
     @Override

@@ -8,6 +8,7 @@ public class Document implements Serializable {
 
   private Long id = null;
   private String name = null;
+  private String lang = null;
   
   public Long getId() {
     return id;
@@ -22,8 +23,19 @@ public class Document implements Serializable {
     this.name = name;
   }
   
+  public String getLang() {
+    return lang;
+  }
+  public void setLang(String lang) {
+    this.lang = lang;
+  }
   public Document(Long id, String name) {
     this.id = id;
     this.name = name;
+  }
+  public Document(Long id, String name, String lang) {
+    this.id = id;
+    this.name = name;
+    this.lang = lang;
   }
 }
