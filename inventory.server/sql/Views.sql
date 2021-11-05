@@ -134,3 +134,23 @@ ALTER TABLE v_parts_page
 GRANT ALL ON TABLE v_parts_page TO michel;
 GRANT ALL ON TABLE v_parts_page TO ftdb;
 
+Create or replace VIEW v_parts_by_box as
+SELECT 
+   bc.container_id box_id, container.label box_label, container.model_id, model_label.label model_label, 
+   p.id part_id, pn.year_number, p.title_id, l2.label, bc.count, pc.count kit_count, p.color_id, 
+   p.cost, bc.count * p.cost total_cost, bc.bin_id, pc.ftdb_count 
+ FROM v_box_contains bc 
+ JOIN part p ON p.id = bc.part_id 
+ JOIN box b ON b.id = bc.container_id
+ LEFT JOIN multilingual_label l2 ON l2.id = p.title_id AND l2.langcode = 'de'
+ LEFT JOIN v_one_part_number pn ON pn.part_id = p.id
+ LEFT JOIN box container on container.id = bc.container_id -- coalesce(bc.bin_id,bc.container_id)
+ LEFT JOIN part_contains pc ON pc.container_id = container.model_id AND p.id = pc.part_id 
+ LEFT JOIN part model ON model.id = container.model_id
+ LEFT JOIN multilingual_label model_label ON model_label.id = model.title_id AND model_label.langcode = 'de'
+WHERE
+  NOT b.lot_achat
+;
+
+GRANT ALL ON TABLE v_parts_by_box TO michel;
+GRANT ALL ON TABLE v_parts_by_box TO ftdb;

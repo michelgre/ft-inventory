@@ -9,6 +9,7 @@ import org.eclipse.scout.rt.platform.text.TEXTS;
 
 import pers.mr.ft.inventory.client.pages.BoxTablePage;
 import pers.mr.ft.inventory.client.pages.BoxesByLocationNodePage;
+import pers.mr.ft.inventory.client.pages.MissingPartsTablePage;
 import pers.mr.ft.inventory.shared.Icons;
 
 /**
@@ -27,6 +28,7 @@ public class InventoryOutline extends AbstractOutline {
 
     pageList.add(new BoxTablePage("LotAchat").withLotAchat(true));
     
+    pageList.add(new MissingPartsTablePage());
     
   }
 
