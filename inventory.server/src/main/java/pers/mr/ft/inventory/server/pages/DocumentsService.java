@@ -12,10 +12,10 @@ public class DocumentsService implements IDocumentsService {
   public DocumentsTablePageData getDocumentsTableData(SearchFilter filter) {
     DocumentsTablePageData pageData = new DocumentsTablePageData();
     
-    String query = "SELECT id, datenbank_id, part_number, year, title, ft_title, language, (SELECT COUNT(*) FROM doc_part WHERE doc_id = id) " +
+    String query = "SELECT id, datenbank_id, part_number, year, title, ft_title, language, (SELECT COUNT(*) FROM doc_part WHERE doc_id = id), LENGTH(content) " +
         " FROM document " +
         " WHERE 1 = 1" +
-        " INTO :{page.id}, :{page.dbId}, :{page.part}, :{page.year}, :{page.name}, :{page.fTDBName}, :{page.lang}, :{page.usedInCount}"
+        " INTO :{page.id}, :{page.dbId}, :{page.part}, :{page.year}, :{page.name}, :{page.fTDBName}, :{page.lang}, :{page.usedInCount}, :{page.size}"
         ;
     SQL.selectInto(query, new NVPair("page", pageData), new NVPair("filter", filter.getFormData()));
     return pageData;

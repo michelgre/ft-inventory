@@ -77,6 +77,10 @@ public class DocumentsTablePage extends AbstractPageWithTable<Table> {
       return getColumnSet().getColumnByClass(LangColumn.class);
     }
 
+    public SizeColumn getSizeColumn() {
+      return getColumnSet().getColumnByClass(SizeColumn.class);
+    }
+
     public NameColumn getNameColumn() {
       return getColumnSet().getColumnByClass(NameColumn.class);
     }
@@ -192,6 +196,19 @@ public class DocumentsTablePage extends AbstractPageWithTable<Table> {
       @Override
       protected int getConfiguredWidth() {
         return 70;
+      }
+    }
+
+    @Order(8000)
+    public class SizeColumn extends AbstractLongColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("Size");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 100;
       }
     }
     
