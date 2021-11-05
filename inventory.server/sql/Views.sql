@@ -137,7 +137,7 @@ GRANT ALL ON TABLE v_parts_page TO ftdb;
 Create or replace VIEW v_parts_by_box as
 SELECT 
    bc.container_id box_id, container.label box_label, container.model_id, model_label.label model_label, 
-   p.id part_id, pn.year_number, p.title_id, l2.label, bc.count, pc.count kit_count, p.color_id, 
+   p.id part_id, pn.year_number, p.title_id, l2.label, COALESCE(bc.count,0) count, pc.count kit_count, p.color_id, 
    p.cost, bc.count * p.cost total_cost, bc.bin_id, pc.ftdb_count 
  FROM v_box_contains bc 
  JOIN part p ON p.id = bc.part_id 
