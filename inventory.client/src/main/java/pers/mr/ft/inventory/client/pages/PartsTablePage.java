@@ -16,7 +16,6 @@ import org.eclipse.scout.rt.client.ui.action.menu.TableMenuType;
 import org.eclipse.scout.rt.client.ui.basic.table.AbstractTable;
 import org.eclipse.scout.rt.client.ui.basic.table.ITableRow;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractDecimalColumn;
-import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractIconColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractIntegerColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractSmartColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractStringColumn;
@@ -41,6 +40,7 @@ import pers.mr.ft.inventory.client.ClientSession;
 import pers.mr.ft.inventory.client.Desktop;
 import pers.mr.ft.inventory.client.columns.AbstractIdColumn;
 import pers.mr.ft.inventory.client.columns.AbstractLabelColumn;
+import pers.mr.ft.inventory.client.columns.AbstractPartIconColumn;
 import pers.mr.ft.inventory.client.columns.AbstractPartNumberColumn;
 import pers.mr.ft.inventory.client.forms.BoxForm;
 import pers.mr.ft.inventory.client.forms.DocumentForm;
@@ -141,21 +141,7 @@ public class PartsTablePage extends AbstractPageWithTable<Table> {
     }
 
     @Order(3000)
-    public class IconColumn extends AbstractIconColumn {
-      @Override
-      protected String getConfiguredHeaderText() {
-        return TEXTS.get("Icon");
-      }
-
-      @Override
-      protected int getConfiguredWidth() {
-        return 100;
-      }
-      
-      @Override
-      protected String getConfiguredCssClass() {
-        return "part-icon";
-      }
+    public class IconColumn extends AbstractPartIconColumn {
     }
 
     @Order(4000)
