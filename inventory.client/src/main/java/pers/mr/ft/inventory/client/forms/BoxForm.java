@@ -40,6 +40,7 @@ import pers.mr.ft.inventory.client.ClientSession;
 import pers.mr.ft.inventory.client.Desktop;
 import pers.mr.ft.inventory.client.fields.AbstractIdField;
 import pers.mr.ft.inventory.client.fields.AbstractPartsField;
+import pers.mr.ft.inventory.client.fields.AbstractPartsField.Table.BinColumn;
 import pers.mr.ft.inventory.client.fields.AbstractPartsField.Table.ColorColumn;
 import pers.mr.ft.inventory.client.fields.AbstractPartsField.Table.CountColumn;
 import pers.mr.ft.inventory.client.fields.AbstractPartsField.Table.IconColumn;
@@ -52,6 +53,7 @@ import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.DocumentsMenu;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.EditMainBoxButton;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox;
+import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BoughtSetField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BoxTypeField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.ColorField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DescriptionField;
@@ -59,6 +61,7 @@ import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.D
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DimensionsBox.HeightField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DimensionsBox.LengthField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DimensionsBox.WidthField;
+import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.GivenField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.IdField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.LabelField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.LocationField;
@@ -82,8 +85,6 @@ import pers.mr.ft.inventory.shared.forms.UpdateBoxPermission;
 import pers.mr.ft.inventory.shared.lookup.BoxLookupCall;
 import pers.mr.ft.inventory.shared.lookup.BoxTypeLookupCall;
 import pers.mr.ft.inventory.shared.model.Document;
-import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BoughtSetField;
-import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.GivenField;
 
 @FormData(value = BoxFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class BoxForm extends AbstractForm {
@@ -1338,6 +1339,7 @@ public class BoxForm extends AbstractForm {
           IconColumn iconColumn = getTable().getIconColumn();
           ColorColumn colorColumn = getTable().getColorColumn();
           PartNumberColumn pnColumn = getTable().getPartNumberColumn();
+          BinColumn binColumn = getTable().getBinColumn();
           
           for (ITableRow row: getTable().getSelectedRows()) {
             Integer count = countColumn.getValue(row);
@@ -1353,6 +1355,7 @@ public class BoxForm extends AbstractForm {
               movedPartData.setPartNumber(pnColumn.getValue(row));
               movedPartData.setCount(count); 
               movedPartData.setMaxCount(count);
+              movedPartData.setBin(binColumn.getValue(row));
             }            
           }
           form.startModify(moveFormData);
@@ -1369,8 +1372,14 @@ public class BoxForm extends AbstractForm {
             exportFormData(formData);
             
             BoxFormData fromBoxData = service.moveParts(formData, moveFormData,true);
+            fromBoxData = new BoxFormData();
+            fromBoxData.setBoxId(boxId);
+            fromBoxData = service.load(fromBoxData);
             importFormData(fromBoxData);
-            this.markSaved();
+            getPartsField().updateCalculatedValues(null);
+            getPartsField().showKitStatus(null);
+            getTotalValueField().markSaved();
+            getPartsField().markSaved();
           }
         }
      }

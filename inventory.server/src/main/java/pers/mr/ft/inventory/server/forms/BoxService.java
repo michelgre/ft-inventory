@@ -1,5 +1,9 @@
 package pers.mr.ft.inventory.server.forms;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.exception.VetoException;
 import org.eclipse.scout.rt.platform.holders.NVPair;
@@ -9,6 +13,7 @@ import org.eclipse.scout.rt.server.jdbc.SQL;
 import org.eclipse.scout.rt.shared.data.basic.table.AbstractTableRowData;
 
 import pers.mr.ft.inventory.server.ServerSession;
+import pers.mr.ft.inventory.shared.codetype.HistoyTypeCodeType.HistoryType;
 import pers.mr.ft.inventory.shared.forms.BoxFormData;
 import pers.mr.ft.inventory.shared.forms.BoxFormData.Parts.PartsRowData;
 import pers.mr.ft.inventory.shared.forms.CreateBoxPermission;
@@ -247,20 +252,41 @@ public class BoxService implements IBoxService {
     Long fromBoxId = moveData.getFromBoxId().getValue();
     Long toBoxId = moveData.getToBox().getValue();
     
+    // Boite(s) origine
+    Map<Long,BoxFormData> allFromBoxData = new HashMap<>();
+    allFromBoxData.put(fromBoxId, fromBoxData);
+    
     // Données boîte destination
     BoxFormData toBoxData = new BoxFormData();
     toBoxData.setBoxId(toBoxId);
     load(toBoxData);
     
-    if (fromBoxId != toBoxId) {
-      for (MovePartsFormData.Parts.PartsRowData movedPartData: moveData.getParts().getRows()) {
+    for (MovePartsFormData.Parts.PartsRowData movedPartData: moveData.getParts().getRows()) {
+      Long fromBinId = movedPartData.getBin();
+      Long actualFromBoxId = fromBoxId;
+      BoxFormData actualFromBoxData = fromBoxData;
+      if (fromBinId!=null && fromBinId!=0) {
+        // La pièce est dans un compartiment, on récupère les données de celui-ci
+        actualFromBoxId = fromBinId;
+        actualFromBoxData = allFromBoxData.get(actualFromBoxId);
+        if (actualFromBoxData==null) {
+          // On ne les a pas encore, on les charge
+          actualFromBoxData = new BoxFormData();
+          actualFromBoxData.setBoxId(actualFromBoxId);
+          load(actualFromBoxData);
+          allFromBoxData.put(actualFromBoxId, actualFromBoxData);
+        }
+      }
+      if (actualFromBoxId != toBoxId) {
         Long partId = movedPartData.getId();
         Integer count = movedPartData.getCount();
+        int movedCount = 0;
         
         // Recherche de la pièce dans les 2 boites
-        for (PartsRowData partData: fromBoxData.getParts().getRows()) {
-          if (partData.getId().equals(partId)) {
+        for (PartsRowData partData: actualFromBoxData.getParts().getRows()) {
+          if (partData.getId().equals(partId) && (partData.getBin()==null || partData.getBin()==0)) {
             int newCount = partData.getCount()-count;
+            movedCount = count;
             partData.setCount(newCount);
             if (removeEmptyLines && newCount==0) {
               partData.setRowState(AbstractTableRowData.STATUS_DELETED);
@@ -273,16 +299,18 @@ public class BoxService implements IBoxService {
         }
         
         boolean partFound = false;
-        for (PartsRowData partData: toBoxData.getParts().getRows()) {
-          if (partData.getId().equals(partId)) {
-            Integer oldCount = partData.getCount();
-            if (oldCount==null) {
-              oldCount = 0;
+        if (movedCount>0) { // Si on a réussi à enlever la pièce de la boite origine (pour éviter les bugs)
+          for (PartsRowData partData: toBoxData.getParts().getRows()) {
+            if (partData.getId().equals(partId) && (partData.getBin()==null || partData.getBin()==0)) {
+              Integer oldCount = partData.getCount();
+              if (oldCount==null) {
+                oldCount = 0;
+              }
+              partData.setCount(oldCount+count);
+              partData.setRowState(AbstractTableRowData.STATUS_UPDATED);
+              partFound = true;
+              break;
             }
-            partData.setCount(oldCount+count);
-            partData.setRowState(AbstractTableRowData.STATUS_UPDATED);
-            partFound = true;
-            break;
           }
         }
         
@@ -293,9 +321,30 @@ public class BoxService implements IBoxService {
           partData.setCount(count);
           partData.setRowState(AbstractTableRowData.STATUS_INSERTED);
         }
+      
+        Long userId = ServerSession.get().getPrincipal().getId();
+        Date now = new Date();
+        HistoryType hType = HistoryType.Move;
+        String info = null; // TODO ?
+        Long i1 = actualFromBoxId;
+        Long i2 = toBoxId;
+        Long i3 = partId;
+        Long i4 = count.longValue();
+        SQL.insert("INSERT INTO history (user_id, ts, type, info, i1, i2, i3, i4) VALUES (:userId, :ts, :type, :info, :i1, :i2, :i3, :i4)",
+            new NVPair("userId", userId),
+            new NVPair("ts", now),
+            new NVPair("type", hType.getCode()),
+            new NVPair("info", info),
+            new NVPair("i1", i1),
+            new NVPair("i2", i2),
+            new NVPair("i3", i3),
+            new NVPair("i4", i4)
+            );
       }
-      store(toBoxData);
-      store(fromBoxData);
+    }
+    storeParts(toBoxData);
+    for (BoxFormData boxData: allFromBoxData.values()) {
+      storeParts(boxData);
     }
     
     return fromBoxData; 
