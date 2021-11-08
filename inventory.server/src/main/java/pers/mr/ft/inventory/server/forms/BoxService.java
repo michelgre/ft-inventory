@@ -323,6 +323,10 @@ public class BoxService implements IBoxService {
         }
       
         Long userId = ServerSession.get().getPrincipal().getId();
+        /*
+        ZonedDateTime nowUtc = ZonedDateTime.now(ZoneOffset.UTC);
+        Timestamp now = Timestamp.valueOf(nowUtc.toLocalDateTime());
+        */
         Date now = new Date();
         HistoryType hType = HistoryType.Move;
         String info = null; // TODO ?

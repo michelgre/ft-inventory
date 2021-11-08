@@ -55,6 +55,9 @@ public class HistoryService implements IHistoryService {
     HistoryTablePageData pageData = new HistoryTablePageData();
     FTPrincipal principal = ServerSession.get().getPrincipal();
     
+    //TimeZone tz = Calendar.getInstance().getTimeZone();
+    //  at time zone 'UTC' at time zone :tz
+    //new NVPair("tz", tz.getID()),
     SQL.selectInto("SELECT id, ts, type, info, i1, i2, i3, i4, s1, s2, user_id FROM history "
         + " WHERE user_id = :principalId "
         + " ORDER BY ts DESC,id DESC " +
@@ -86,6 +89,7 @@ public class HistoryService implements IHistoryService {
           break;
         }
       }
+      
     }
     return pageData;
   }
