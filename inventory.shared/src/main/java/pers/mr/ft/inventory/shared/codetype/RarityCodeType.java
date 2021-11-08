@@ -1,6 +1,5 @@
 package pers.mr.ft.inventory.shared.codetype;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
