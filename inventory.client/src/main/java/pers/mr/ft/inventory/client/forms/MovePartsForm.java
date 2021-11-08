@@ -12,11 +12,11 @@ import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
 import org.eclipse.scout.rt.client.ui.form.fields.longfield.AbstractLongField;
 import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
-import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.text.TEXTS;
 import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
 
+import pers.mr.ft.inventory.client.Desktop;
 import pers.mr.ft.inventory.client.fields.AbstractPartsField;
 import pers.mr.ft.inventory.client.forms.MovePartsForm.MainBox.CancelButton;
 import pers.mr.ft.inventory.client.forms.MovePartsForm.MainBox.GroupBox;
@@ -24,9 +24,6 @@ import pers.mr.ft.inventory.client.forms.MovePartsForm.MainBox.GroupBox.FromBoxI
 import pers.mr.ft.inventory.client.forms.MovePartsForm.MainBox.GroupBox.FromBoxLabelField;
 import pers.mr.ft.inventory.client.forms.MovePartsForm.MainBox.GroupBox.ToBoxField;
 import pers.mr.ft.inventory.client.forms.MovePartsForm.MainBox.OkButton;
-import pers.mr.ft.inventory.shared.forms.BoxFormData;
-import pers.mr.ft.inventory.shared.forms.CreateMovePartsPermission;
-import pers.mr.ft.inventory.shared.forms.IBoxService;
 import pers.mr.ft.inventory.shared.forms.MovePartsFormData;
 import pers.mr.ft.inventory.shared.forms.UpdateMovePartsPermission;
 import pers.mr.ft.inventory.shared.lookup.BoxLookupCall;
@@ -77,6 +74,11 @@ public class MovePartsForm extends AbstractForm {
       @Override
       protected int getConfiguredGridColumnCount() {
         return 10;
+      }
+      
+      @Override
+      protected int getConfiguredHeightInPixel() {
+        return 300;
       }
 
       @Order(1000)
@@ -211,6 +213,7 @@ public class MovePartsForm extends AbstractForm {
           partsTable.getValueColumn().setDisplayable(false);
           partsTable.getMaxCountColumn().setDisplayable(true);
           partsTable.getPartNumberColumn().setEditable(false);
+          partsTable.getBinColumn().setVisible(true);
           hideAndDisableMenu(partsTable.getMenuByClass(PartsField.Table.AddRowMenu.class));
           hideAndDisableMenu(partsTable.getMenuByClass(PartsField.Table.DeleteMenu.class));
           hideAndDisableMenu(partsTable.getMenuByClass(PartsField.Table.MovePartsMenu.class));          
@@ -246,11 +249,21 @@ public class MovePartsForm extends AbstractForm {
     @Override
     protected void execLoad() {
       importFormData(moveData);
+      ToBoxField boxField = getToBoxField();
+      if (boxField.getValue()==null || boxField.getValue()==0) {
+        Long prevValue = ((Desktop) getDesktop()).getLastUsedIdByType(ToBoxField.class.getName());
+        if (prevValue!=null) {
+          boxField.setValue(prevValue);
+        }
+      }
       setEnabledPermission(new UpdateMovePartsPermission());
     }
 
     @Override
     protected void execStore() {
+      ToBoxField boxField = getToBoxField();
+      ((Desktop) getDesktop()).setLastUsedIdByType(ToBoxField.class.getName(), boxField.getValue());
+      
       moveData = new MovePartsFormData();
       exportFormData(moveData);
     }
