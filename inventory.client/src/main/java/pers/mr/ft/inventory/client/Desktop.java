@@ -38,6 +38,7 @@ import pers.mr.ft.inventory.client.forms.AbstractDesktopForm;
 import pers.mr.ft.inventory.client.forms.BoxForm;
 import pers.mr.ft.inventory.client.forms.BoxTypeForm;
 import pers.mr.ft.inventory.client.forms.DocumentForm;
+import pers.mr.ft.inventory.client.forms.InfoForm;
 import pers.mr.ft.inventory.client.forms.LocationForm;
 import pers.mr.ft.inventory.client.forms.PartForm;
 import pers.mr.ft.inventory.client.forms.ReportModelForm;
@@ -60,6 +61,7 @@ public class Desktop extends AbstractDesktop {
   private Map<Long,LocationForm> locationFormsById = new HashMap<>();
   private Map<Long,ShopForm> shopFormsById = new HashMap<>();
   private Map<Long,ReportModelForm> reportModelFormsById = new HashMap<>();
+  private Map<String,Long> lastUsedIdByType = new HashMap<>();
 
   private Set<Long> partsClipboard = new HashSet<>();
   
@@ -262,7 +264,7 @@ public class Desktop extends AbstractDesktop {
 
       @Override
       protected void execAction() {
-        ScoutInfoForm form = new ScoutInfoForm();
+        ScoutInfoForm form = new InfoForm();
         form.startModify();
       }
     }
@@ -618,5 +620,13 @@ public class Desktop extends AbstractDesktop {
       partList.add(id);
     }
     return partList;
+  }
+  
+  public void setLastUsedIdByType(String idType, Long id) {
+    lastUsedIdByType.put(idType, id);
+  }
+  
+  public Long getLastUsedIdByType(String idType) {
+    return lastUsedIdByType.get(idType);
   }
 }
