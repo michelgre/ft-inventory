@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PartsList" columnCount="2" printOrder="Horizontal" pageWidth="496" pageHeight="705" columnWidth="234" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" isTitleNewPage="true" isSummaryNewPage="true" uuid="30b1f22d-152a-4797-90c7-480ba699612c">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
@@ -106,11 +106,11 @@ ORDER BY bin.id, part_label]]>
 	<group name="box_id" isStartNewPage="true" isReprintHeaderOnEachPage="true" keepTogether="true" preventOrphanFooter="true">
 		<groupExpression><![CDATA[$F{box_id}]]></groupExpression>
 		<groupHeader>
-			<band height="96">
+			<band height="45">
 				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<textField>
-					<reportElement x="160" y="0" width="210" height="30" uuid="73652913-ad17-4510-85b3-f9097ae0401f">
+					<reportElement x="160" y="0" width="199" height="30" uuid="73652913-ad17-4510-85b3-f9097ae0401f">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box leftPadding="2"/>
@@ -118,7 +118,7 @@ ORDER BY bin.id, part_label]]>
 					<textFieldExpression><![CDATA[$F{box_label}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="box_id">
-					<reportElement x="400" y="0" width="70" height="30" uuid="78594de8-62a6-4dd7-8b6f-e7a86c4e72ca"/>
+					<reportElement x="410" y="0" width="60" height="30" uuid="78594de8-62a6-4dd7-8b6f-e7a86c4e72ca"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA["# " + $V{count6} + " / " + $V{part_id1} + " ≠"]]></textFieldExpression>
 				</textField>
@@ -142,7 +142,7 @@ ORDER BY bin.id, part_label]]>
 					<textFieldExpression><![CDATA[TEXT($F{box_id},"0000")]]></textFieldExpression>
 				</textField>
 				<image>
-					<reportElement x="370" y="0" width="30" height="30" uuid="83aa6aab-b2e8-4d58-8b82-45c58e98854a">
+					<reportElement x="359" y="0" width="50" height="45" uuid="83aa6aab-b2e8-4d58-8b82-45c58e98854a">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
