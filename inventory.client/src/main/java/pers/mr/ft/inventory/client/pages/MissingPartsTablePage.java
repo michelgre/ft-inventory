@@ -78,7 +78,7 @@ public class MissingPartsTablePage extends AbstractPageWithTable<Table> {
     }
     @Override
     protected Class<? extends IMenu> getConfiguredDefaultMenu() {
-      return EditPartMenu.class;
+      return OpenBoxMenu.class;
     }
     
     public ModelColumn getModelColumn() {
