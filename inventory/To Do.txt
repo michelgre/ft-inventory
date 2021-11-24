@@ -1,0 +1,19 @@
+Gestion des droits / utilisateur
+
+- Menu Paramètres 
+   - Droits d'accès sauf admin pour:
+     - Boutiques
+     - Modèles Rapports
+     - Historique ??
+     
+   - Gestion par utilisateur pour:     
+     - Type Boite
+     - Emplacement
+
+- Localisation:
+  - Nom modèle Rapport 
+  
+
+- Pièces / Ensembles Construction
+   - Droits d'accès RO Form sauf admin
+   - Droits d'accès menus Synchro 
