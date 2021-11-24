@@ -1,8 +1,12 @@
 package pers.mr.ft.inventory.client.pages;
 
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.scout.rt.client.dto.Data;
+import org.eclipse.scout.rt.client.ui.action.keystroke.AbstractKeyStroke;
+import org.eclipse.scout.rt.client.ui.action.keystroke.IKeyStroke;
+import org.eclipse.scout.rt.client.ui.action.keystroke.KeyStroke;
 import org.eclipse.scout.rt.client.ui.action.menu.AbstractMenu;
 import org.eclipse.scout.rt.client.ui.action.menu.IMenu;
 import org.eclipse.scout.rt.client.ui.action.menu.IMenuType;
@@ -425,7 +429,22 @@ public class MissingPartsTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
+    @Order(1000)
+    public class CopyKeyStroke extends AbstractKeyStroke {
+      @Override
+      protected String getConfiguredKeyStroke() {
+        return KeyStroke.combineKeyStrokes(IKeyStroke.CONTROL, "C");
+      }
+
+      @Override
+      protected void execAction() {
+        List<Long> parts = getPartIdColumn().getSelectedValues();
+        ((Desktop) ClientSession.get().getDesktop()).copyPartsClipboard(parts, true);
+      }
+    }
+ 
     
+
     private class RowChangedListener implements FormListener {
       @Override
       public void formChanged(FormEvent e) {
