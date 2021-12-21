@@ -398,6 +398,7 @@ public class PartFormData extends AbstractFormData {
       public static final String bin = "bin";
       public static final String value = "value";
       public static final String oldId = "oldId";
+      public static final String inventoryCount = "inventoryCount";
       private Long m_id;
       private String m_partNumber;
       private Integer m_count;
@@ -412,6 +413,7 @@ public class PartFormData extends AbstractFormData {
       private Long m_bin;
       private Double m_value;
       private Long m_oldId;
+      private Integer m_inventoryCount;
 
       public Long getId() {
         return m_id;
@@ -523,6 +525,14 @@ public class PartFormData extends AbstractFormData {
 
       public void setOldId(Long newOldId) {
         m_oldId = newOldId;
+      }
+
+      public Integer getInventoryCount() {
+        return m_inventoryCount;
+      }
+
+      public void setInventoryCount(Integer newInventoryCount) {
+        m_inventoryCount = newInventoryCount;
       }
     }
   }

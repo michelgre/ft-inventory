@@ -47,8 +47,7 @@ public class ConstructionSetTablePageData extends PartsTablePageData {
     super.setRows(rows);
   }
 
-  public static class ConstructionSetTableRowData
-      extends pers.mr.ft.inventory.shared.pages.PartsTablePageData.PartsTableRowData {
+  public static class ConstructionSetTableRowData extends PartsTableRowData {
     private static final long serialVersionUID = 1L;
   }
 }

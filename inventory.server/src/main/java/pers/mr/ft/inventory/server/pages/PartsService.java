@@ -62,7 +62,7 @@ public class PartsService implements IPartsService {
     
     String invCount = "inv_sum";
     if (buildingKits) {
-      invCount = "(SELECT NULLIF(COUNT(*),0) FROM box where model_id = p.id AND NOT lot_achat) ";
+      invCount = "(SELECT NULLIF(COUNT(*),0) FROM box where model_id = p.id AND NOT lot_achat AND NOT given) ";
     }
     
     String query = "SELECT " + 

@@ -84,6 +84,9 @@ public class BoxService implements IBoxService {
       throw new VetoException(TEXTS.get("AuthorizationFailed"));
     }
     // TODO: Choix de langue dans la session
+    FTPrincipal principal = ServerSession.get().getPrincipal();
+    Long userId = principal.getId();
+    
     String userLanguage = ServerSession.get().getSessionLanguage();
     String defaultLanguage =  ServerSession.get().getDefaultLanguage();
 
@@ -93,21 +96,22 @@ public class BoxService implements IBoxService {
         " INTO :id, :label, :boxType, :description, :parent, :location, :color, :length, :width, :height, :remarks, :model, :boughtSet, :given";
     SQL.selectInto(query, formData);
     
-    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, bc.count, pc.count, p.color_id, COALESCE (p.cost, 0.0), COALESCE (bc.count * p.cost, 0.0), bc.bin_id, pc.ftdb_count " +
-        " FROM v_box_contains bc " +
+    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, bc.count, pc.count, p.color_id, COALESCE (p.cost, 0.0), COALESCE (bc.count * p.cost, 0.0), bc.bin_id, pc.ftdb_count, inv_sum " +
+        " FROM v_box_contains_with_inv bc " +
         " JOIN part p ON p.id = bc.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +
         " LEFT JOIN multilingual_label l2 ON l2.id = p.title_id AND l2.langcode = :defaultLanguage " +
         " LEFT JOIN v_one_part_number pn ON pn.part_id = p.id " +
         " LEFT JOIN box container on container.id = bc.bin_id " +
         " LEFT JOIN part_contains pc ON pc.container_id = COALESCE(container.model_id,:model) AND p.id = pc.part_id " +
-        " WHERE bc.container_id = :boxId " +
-        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.kitCount}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.bin}, :{parts.fTDBCount}"
+        " WHERE bc.container_id = :boxId AND bc.inv_user_id = :userId " +
+        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.kitCount}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.bin}, :{parts.fTDBCount}, :{parts.inventoryCount}"
     ;
     SQL.selectInto(partsQuery, 
         formData, 
         new NVPair("userLanguage", userLanguage), 
-        new NVPair("defaultLanguage", defaultLanguage));
+        new NVPair("defaultLanguage", defaultLanguage), 
+        new NVPair("userId", userId));
     
     String docsQuery = "SELECT d.id, d.title " + 
         " FROM document d " + 

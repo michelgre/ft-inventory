@@ -7,11 +7,18 @@ import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 import pers.mr.ft.inventory.server.ServerSession;
 import pers.mr.ft.inventory.shared.pages.IMissingPartsService;
 import pers.mr.ft.inventory.shared.pages.MissingPartsTablePageData;
+import pers.mr.ft.inventory.shared.security.FTPrincipal;
 
 public class MissingPartsService implements IMissingPartsService {
   @Override
   public MissingPartsTablePageData getMissingPartsTableData(SearchFilter filter) {
     MissingPartsTablePageData pageData = new MissingPartsTablePageData();
+    
+    FTPrincipal principal = ServerSession.get().getPrincipal();
+    Long userId = 0L;
+    if (principal!=null) {
+      userId = principal.getId();
+    }
     
     // TODO: Choix de langue dans la session
     String userLanguage = ServerSession.get().getSessionLanguage();
@@ -22,15 +29,17 @@ public class MissingPartsService implements IMissingPartsService {
         " part_id, year_number, COALESCE(lt.label, part.label), " +
         " 'icons/?image=' || p.ft_icon, " +
         " count, kit_count, count - kit_count, part.color_id, " +
-        " part.cost, part.cost * (kit_count - count) "+
+        " part.cost, part.cost * (kit_count - count), "+
+        " part.inv_sum "+
         "FROM v_parts_by_box part " +
         " LEFT JOIN multilingual_label lt ON lt.id = part.title_id AND lt.langcode = :userLanguage " +
         " JOIN part p ON p.id = part.part_id " +
-        "WHERE count < kit_count "+
+        "WHERE count < kit_count AND user_id = :userId "+
         "ORDER BY box_id, bin_id, part_id " +
-        "INTO :boxId, :boxLabel, :bin, :model, :partId, :partNumber, :part, :icon, :boxCount, :kitCount, :deltaCount, :color, :partValue, :value ",
+        "INTO :boxId, :boxLabel, :bin, :model, :partId, :partNumber, :part, :icon, :boxCount, :kitCount, :deltaCount, :color, :partValue, :value, :inventoryCount ",
         pageData, 
-        new NVPair("userLanguage", userLanguage));
+        new NVPair("userLanguage", userLanguage), 
+        new NVPair("userId", userId));
     return pageData;
   }
 }

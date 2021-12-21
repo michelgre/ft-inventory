@@ -64,6 +64,7 @@ public class MissingPartsTablePageData extends AbstractTablePageData {
     public static final String color = "color";
     public static final String partValue = "partValue";
     public static final String value = "value";
+    public static final String inventoryCount = "inventoryCount";
     private Long m_boxId;
     private String m_boxLabel;
     private Long m_bin;
@@ -78,6 +79,7 @@ public class MissingPartsTablePageData extends AbstractTablePageData {
     private Long m_color;
     private Double m_partValue;
     private Double m_value;
+    private Integer m_inventoryCount;
 
     public Long getBoxId() {
       return m_boxId;
@@ -189,6 +191,14 @@ public class MissingPartsTablePageData extends AbstractTablePageData {
 
     public void setValue(Double newValue) {
       m_value = newValue;
+    }
+
+    public Integer getInventoryCount() {
+      return m_inventoryCount;
+    }
+
+    public void setInventoryCount(Integer newInventoryCount) {
+      m_inventoryCount = newInventoryCount;
     }
   }
 }

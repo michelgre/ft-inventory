@@ -227,7 +227,7 @@ public class PartsTablePage extends AbstractPageWithTable<Table> {
 
       @Override
       protected int getConfiguredWidth() {
-        return 100;
+        return 75;
       }
     }
 

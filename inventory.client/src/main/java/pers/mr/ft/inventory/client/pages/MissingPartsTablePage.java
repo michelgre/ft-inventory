@@ -124,6 +124,9 @@ public class MissingPartsTablePage extends AbstractPageWithTable<Table> {
     public DeltaCountColumn getDeltaCountColumn() {
       return getColumnSet().getColumnByClass(DeltaCountColumn.class);
     }
+    public InventoryCountColumn getInventoryCountColumn() {
+      return getColumnSet().getColumnByClass(InventoryCountColumn.class);
+    }
     public PartColumn getPartColumn() {
       return getColumnSet().getColumnByClass(PartColumn.class);
     }
@@ -152,7 +155,7 @@ public class MissingPartsTablePage extends AbstractPageWithTable<Table> {
         return 67;
       }
       protected String getConfiguredAggregationFunction() {
-        return "none";
+        return AggregationFunction.NONE;
       }
     }
 
@@ -351,7 +354,7 @@ public class MissingPartsTablePage extends AbstractPageWithTable<Table> {
       }
       
       protected String getConfiguredAggregationFunction() {
-        return "none";
+        return AggregationFunction.NONE;
       }
     }
 
@@ -385,6 +388,26 @@ public class MissingPartsTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
+    @Order(10000)
+    public class InventoryCountColumn extends AbstractIntegerColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("InventoryCount");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 75;
+      }
+      
+      @Override
+      protected String getConfiguredAggregationFunction() {
+        return AggregationFunction.MAX;
+      }
+      
+    }
+
+    
     @Order(1000)
     public class EditPartMenu extends AbstractMenu {
       @Override

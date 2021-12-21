@@ -416,6 +416,9 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
     public FTDBCountColumn getFTDBCountColumn() {
       return getColumnSet().getColumnByClass(FTDBCountColumn.class);
     }
+    public InventoryCountColumn getInventoryCountColumn() {
+      return getColumnSet().getColumnByClass(InventoryCountColumn.class);
+    }
     public OldIdColumn getOldIdColumn() {
       return getColumnSet().getColumnByClass(OldIdColumn.class);
     }
@@ -764,6 +767,20 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
       @Override
       protected boolean getConfiguredVisible() {
         return false;
+      }
+    }
+
+
+    @Order(8000)
+    public class InventoryCountColumn extends AbstractIntegerColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("InventoryCount");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 75;
       }
     }
 

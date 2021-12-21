@@ -76,19 +76,20 @@ public class PartService implements IPartService {
         new NVPair("defaultLanguage", defaultLanguage));
     
     // Pièces incluses
-    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, pc.count, color_id, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0), pc.ftdb_count " +
-        " FROM part_contains pc " +
+    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, pc.count, color_id, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0), pc.ftdb_count,pc.inv_sum " +
+        " FROM v_part_contains pc " +
         " JOIN part p ON p.id = pc.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +
         " LEFT JOIN multilingual_label l2 ON l2.id = p.title_id AND l2.langcode = :defaultLanguage " +
         " LEFT JOIN v_one_part_number pn ON pn.part_id = p.id " +
-        " WHERE pc.container_id = :partId " +
-        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.fTDBCount}"
+        " WHERE pc.container_id = :partId AND (pc.inv_user_id IS NULL OR pc.inv_user_id = :userId) " +
+        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.fTDBCount}, :{parts.inventoryCount}"
     ;
     SQL.selectInto(partsQuery, 
         formData, 
         new NVPair("userLanguage", userLanguage), 
-        new NVPair("defaultLanguage", defaultLanguage));
+        new NVPair("defaultLanguage", defaultLanguage), 
+        new NVPair("userId", userId));
     
     // Boîtes contenant
     String boxesQuery = "SELECT b.id, b.label, bc.count, b.lot_achat, b.location_id " +
