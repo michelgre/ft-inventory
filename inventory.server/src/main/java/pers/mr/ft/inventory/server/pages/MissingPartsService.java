@@ -34,7 +34,7 @@ public class MissingPartsService implements IMissingPartsService {
         "FROM v_parts_by_box part " +
         " LEFT JOIN multilingual_label lt ON lt.id = part.title_id AND lt.langcode = :userLanguage " +
         " JOIN part p ON p.id = part.part_id " +
-        "WHERE count < kit_count AND user_id = :userId "+
+        "WHERE count < kit_count AND (user_id = :userId OR user_id IS NULL) "+
         "ORDER BY box_id, bin_id, part_id " +
         "INTO :boxId, :boxLabel, :bin, :model, :partId, :partNumber, :part, :icon, :boxCount, :kitCount, :deltaCount, :color, :partValue, :value, :inventoryCount ",
         pageData, 
