@@ -104,7 +104,7 @@ public class BoxService implements IBoxService {
         " LEFT JOIN v_one_part_number pn ON pn.part_id = p.id " +
         " LEFT JOIN box container on container.id = bc.bin_id " +
         " LEFT JOIN part_contains pc ON pc.container_id = COALESCE(container.model_id,:model) AND p.id = pc.part_id " +
-        " WHERE bc.container_id = :boxId AND bc.inv_user_id = :userId " +
+        " WHERE bc.container_id = :boxId AND (bc.inv_user_id = :userId OR bc.inv_user_id IS NULL) " +
         " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.kitCount}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.bin}, :{parts.fTDBCount}, :{parts.inventoryCount}"
     ;
     SQL.selectInto(partsQuery, 
