@@ -1197,6 +1197,29 @@ public class PartForm extends AbstractForm {
       protected void execAction() {
       }
     }
+
+    @Order(2000)
+    public class OpenBoxesMenu extends AbstractMenu {
+      @Override
+      protected String getConfiguredText() {
+        return TEXTS.get("OpenBoxes");
+      }
+
+      @Override
+      protected int getConfiguredActionStyle() {
+        return ACTION_STYLE_BUTTON;
+      }
+
+      @Override
+      protected void execAction() {
+        IPartService service = BEANS.get(IPartService.class);
+        List<Long> boxesIds = service.getBoxesFromModel(partId);
+        for (Long boxId: boxesIds) {
+          ((Desktop) ClientSession.get().getDesktop()).findBoxForm(boxId, null);        
+        }
+      }
+    }
+    
     
   }
 

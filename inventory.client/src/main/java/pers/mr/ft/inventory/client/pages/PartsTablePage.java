@@ -329,6 +329,30 @@ public class PartsTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
+    @Order(3000)
+    public class OpenBoxesMenu extends AbstractMenu {
+      @Override
+      protected String getConfiguredText() {
+        return TEXTS.get("OpenBoxes");
+      }
+
+      @Override
+      protected Set<? extends IMenuType> getConfiguredMenuTypes() {
+        return CollectionUtility.hashSet(TableMenuType.SingleSelection);
+      }
+
+      @Override
+      protected void execAction() {
+        IPartService service = BEANS.get(IPartService.class);
+        List<Long> boxesIds = service.getBoxesFromModel(getIdColumn().getSelectedValue());
+        for (Long boxId: boxesIds) {
+          ((Desktop) ClientSession.get().getDesktop()).findBoxForm(boxId, null);        
+        }
+      }
+    }
+
+    
+    
     @Order(4000)
     public class DatenbankMenu extends AbstractMenu {
       @Override

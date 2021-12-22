@@ -295,4 +295,18 @@ public class PartService implements IPartService {
         .withDbPwd(dbPwd);
     ftdbSync.synchronizeImages(partId.intValue());
   }
+
+  @Override
+  public List<Long> getBoxesFromModel(Long modelId) {
+    List<Long> boxesIds = new LinkedList<>();
+    
+    Object[][] data = SQL.select("SELECT id FROM box WHERE model_id = :modelId", new NVPair("modelId", modelId));
+    for (Object[] row: data) {
+      Long boxId = (Long) row[0];
+      if (boxId != null) {
+        boxesIds.add(boxId);
+      }
+    }
+    return boxesIds;
+  }
 }
