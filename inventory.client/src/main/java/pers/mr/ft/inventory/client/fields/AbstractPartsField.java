@@ -375,6 +375,21 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
       }
     }
     
+    public void gotoPart(Long partId) {
+      if (partId == null) {
+        return;
+      }
+      IdColumn idColumn = getIdColumn();
+      for (ITableRow row: getRows()) {
+        Long rowPartId = idColumn.getValue(row);
+        if (partId.equals(rowPartId)) {
+          selectRow(row);
+          scrollToSelection();
+        }
+      }
+    }
+
+    
     public CountColumn getCountColumn() {
       return getColumnSet().getColumnByClass(CountColumn.class);
     }
@@ -1051,5 +1066,10 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
     }
     binColumn.setVisible(hasBin);
   }
+  
+  public void gotoPart(Long partId) {
+    getTable().gotoPart(partId);
+  }
+
 }
 

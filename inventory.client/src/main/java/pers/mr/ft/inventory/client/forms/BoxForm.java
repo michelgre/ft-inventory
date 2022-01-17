@@ -1550,4 +1550,9 @@ public class BoxForm extends AbstractForm {
       service.store(formData);
     }
   }
+  
+  public void gotoPart(Long partId) {
+    getPartsField().gotoPart(partId);
+    getPartsField().requestFocus();
+  }
 }
