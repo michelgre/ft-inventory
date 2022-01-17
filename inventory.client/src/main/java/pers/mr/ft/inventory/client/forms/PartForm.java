@@ -79,6 +79,7 @@ import pers.mr.ft.inventory.client.forms.PartForm.MainBox.GroupBox.PartFieldsBox
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.GroupBox.PartFieldsBox.WeightField;
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.GroupBox.PartsField;
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.OkButton;
+import pers.mr.ft.inventory.client.forms.PartForm.MainBox.OpenBoxesMenu;
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.SyncButton;
 import pers.mr.ft.inventory.shared.codetype.CategoryCodeType;
 import pers.mr.ft.inventory.shared.codetype.ColorCodeType;
@@ -100,6 +101,7 @@ import pers.mr.ft.inventory.shared.pages.ShopTablePageData.ShopTableRowData;
 public class PartForm extends AbstractForm {
   private Long partId = 0L;
   private Long imageId = 0L;
+  private List<Long> relatedBoxIds = new LinkedList<>();
   private List<Document> documents = new LinkedList<>();
 
   @FormData
@@ -120,6 +122,16 @@ public class PartForm extends AbstractForm {
   @FormData
   public void setImageId(Long imageId) {
     this.imageId = imageId;
+  }
+
+  @FormData
+  public List<Long> getRelatedBoxIds() {
+    return relatedBoxIds;
+  }
+
+  @FormData
+  public void setRelatedBoxIds(List<Long> relatedBoxIds) {
+    this.relatedBoxIds = relatedBoxIds;
   }
 
   @FormData
@@ -234,7 +246,7 @@ public class PartForm extends AbstractForm {
   public CancelButton getCancelButton() {
     return getFieldByClass(CancelButton.class);
   }
-
+  
   @Order(1000)
   public class MainBox extends AbstractGroupBox {
     @Order(1000)
@@ -794,6 +806,7 @@ public class PartForm extends AbstractForm {
             protected void execAction() {
               Long boxId = getIdColumn().getSelectedValue();
               BoxForm form = ((Desktop) ClientSession.get().getDesktop()).findBoxForm(boxId, new RowChangedListener());
+              form.gotoPart(partId);
             }
           }
 
@@ -1031,6 +1044,7 @@ public class PartForm extends AbstractForm {
               PartForm form = new PartForm();
               form.setPartId(getIdColumn().getSelectedValue());
               form.startModify();
+              form.gotoPart(partId);
             }
           }
 
@@ -1218,6 +1232,7 @@ public class PartForm extends AbstractForm {
           ((Desktop) ClientSession.get().getDesktop()).findBoxForm(boxId, null);        
         }
       }
+      
     }
     
     
@@ -1267,6 +1282,9 @@ public class PartForm extends AbstractForm {
         getPartsField().setVisible(formData.getParts().getRowCount()>0);
         getBoxesField().setVisible(formData.getBoxes().getRowCount()>0);
         getKitsField().setVisible(formData.getKits().getRowCount()>0);
+        OpenBoxesMenu menu = getWidgetByClass(OpenBoxesMenu.class);
+        menu.setVisible(getRelatedBoxIds().size()>0);
+        getOkButton();
         setTitle(formData.getTitle().getValue());
         
         if (formData.getParts().getRowCount()>0) {
@@ -1315,5 +1333,9 @@ public class PartForm extends AbstractForm {
       exportFormData(formData);
       service.store(formData);
     }
+  }
+  public void gotoPart(Long partId) {
+    getPartsField().gotoPart(partId);
+    getPartsField().requestFocus();
   }
 }

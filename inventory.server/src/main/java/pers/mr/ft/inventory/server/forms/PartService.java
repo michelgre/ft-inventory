@@ -132,6 +132,14 @@ public class PartService implements IPartService {
       formData.getDocuments().add(doc);
     }
     
+    // Boites liées au modèle (pour un kit)
+    Object[][] relatedBoxRows = SQL.select("SELECT id FROM box WHERE model_id = :partId AND NOT given", formData); // AND NOT lot_achat : le bouton ouvre aussi les lots achat
+    List<Long> relatedBoxIds = formData.getRelatedBoxIds();
+    relatedBoxIds.clear();
+    for (Object[] relatedBoxRow: relatedBoxRows) {
+      relatedBoxIds.add((Long) relatedBoxRow[0]);
+    }
+    
     return formData;
   }
   @Override

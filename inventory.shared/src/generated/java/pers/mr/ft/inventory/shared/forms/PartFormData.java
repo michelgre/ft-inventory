@@ -119,6 +119,24 @@ public class PartFormData extends AbstractFormData {
     return getFieldByClass(Rarity.class);
   }
 
+  /**
+   * access method for property RelatedBoxIds.
+   */
+  public List<Long> getRelatedBoxIds() {
+    return getRelatedBoxIdsProperty().getValue();
+  }
+
+  /**
+   * access method for property RelatedBoxIds.
+   */
+  public void setRelatedBoxIds(List<Long> relatedBoxIds) {
+    getRelatedBoxIdsProperty().setValue(relatedBoxIds);
+  }
+
+  public RelatedBoxIdsProperty getRelatedBoxIdsProperty() {
+    return getPropertyByClass(RelatedBoxIdsProperty.class);
+  }
+
   public Title getTitle() {
     return getFieldByClass(Title.class);
   }
@@ -538,6 +556,10 @@ public class PartFormData extends AbstractFormData {
   }
 
   public static class Rarity extends AbstractValueFieldData<Integer> {
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class RelatedBoxIdsProperty extends AbstractPropertyData<List<Long>> {
     private static final long serialVersionUID = 1L;
   }
 
