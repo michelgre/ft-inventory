@@ -126,16 +126,26 @@ public class DocumentService implements IDocumentService {
         }
         break;
       case AbstractTableRowData.STATUS_UPDATED:
+        // Si partId est nul, on a supprimé le lien avec la pièce. Sinon en principe c'est une mise à jour,
+        // mais la ligne peut être marquée UPDATED alors que l'id de pièce n'a pas changé au final.
         if (isGT0(partId)) {
-          SQL.update("UPDATE doc_part SET part_id = :partId WHERE doc_id = :docId and part_id = :oldId", 
-              partData);
+          if (!partId.equals(partData.getOldId())) {
+            SQL.update("UPDATE doc_part SET part_id = :partId WHERE doc_id = :documentId and part_id = :oldId", 
+                partData,
+                new NVPair("partId", partId),
+                new NVPair("documentId", documentId));
+          }
         }
         else {
-          SQL.delete("DELETE FROM doc_part WHERE doc_id = :docId and part_id = :oldId", partData);
+          SQL.delete("DELETE FROM doc_part WHERE doc_id = :documentId and part_id = :oldId", 
+              partData,
+              new NVPair("documentId", documentId));
         }
         break;
       case AbstractTableRowData.STATUS_DELETED:
-        SQL.delete("DELETE FROM doc_part WHERE doc_id = :docId and part_id = :oldId", partData);
+        SQL.delete("DELETE FROM doc_part WHERE doc_id = :documentId and part_id = :oldId", 
+            partData,
+            new NVPair("documentId", documentId));
         break;
       }
     }
