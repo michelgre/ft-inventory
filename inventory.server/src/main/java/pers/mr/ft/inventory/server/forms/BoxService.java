@@ -39,6 +39,7 @@ public class BoxService implements IBoxService {
       formData = load(formData);
       
       // Nouvelle boite : effacer l'id de boite
+      formData.setCopiedId(boxId);
       formData.setBoxId(0L);          
       formData.getId().setValue(0L);
       
@@ -59,6 +60,14 @@ public class BoxService implements IBoxService {
       throw new VetoException(TEXTS.get("AuthorizationFailed"));
     }
     
+    return createInternal(formData, true);
+  }
+  
+  private BoxFormData createInternal(BoxFormData formData, boolean withParts) {
+    if (!ACCESS.check(new CreateBoxPermission())) {
+      throw new VetoException(TEXTS.get("AuthorizationFailed"));
+    }
+    
     FTPrincipal principal = ServerSession.get().getPrincipal();
     Long userId = principal.getId();
     
@@ -72,9 +81,11 @@ public class BoxService implements IBoxService {
     formData.setBoxId(boxId);
     formData.getId().setValue(boxId);
     
-    // Contenu
-    storeParts(formData);
-
+    if (withParts) {
+      // Contenu
+      storeParts(formData, true);
+    }
+    
     return formData;
   }
 
@@ -190,23 +201,67 @@ public class BoxService implements IBoxService {
         "WHERE id = :id", 
         formData);
     
-   
+    // Mise en conformité des compartiments avec la boite principale
+    SQL.update("UPDATE box SET lot_achat = :boughtSet, given = :given WHERE id IN (SELECT DISTINCT bin_id FROM v_box_contains WHERE container_id = :id)", formData);
+    
     // Contenu
-    storeParts(formData);
+    storeParts(formData, false);
     return formData;
   }
   
-  private void storeParts(BoxFormData formData) {
-    // Enregistre le contenu
+  private Long copyCompartment(Long binId, Boolean achat,  Map<Long,Long> createdCompartments) {
+    // Si le compartiment a déjà été créé, on rend son Id
+    if (createdCompartments.containsKey(binId)) {
+      return createdCompartments.get(binId);
+    }
+    
+    // Récupérer les données du compatiment
+    BoxFormData binData = new BoxFormData();
+    binData.setBoxId(binId);
+    binData = load(binData);
+    binData.setBoxId(0L);  // A créer
+    binData.setLotAchat(achat); // Le compartiment a le même statut que le conteneur principal
+
+    // Y-a-t-il un compartiment parent ?
+    Long parentId = binData.getParent().getValue();
+    Long newParentId = 0L;
+    if (parentId!=null && parentId>0) {
+      // Copier le compartiment parent
+      newParentId = copyCompartment(parentId, achat, createdCompartments);
+    }
+    
+    binData.getParent().setValue(newParentId); // Boite pricipale du compatiment à créer
+    binData = createInternal(binData, false);
+    Long newBinId = binData.getBoxId();
+    
+    createdCompartments.put(binId, newBinId); // Table des compartiments copie màj
+    return newBinId;
+  }
+  
+  private void storeParts(BoxFormData formData, boolean creation) {
+    // Enregistre le contenu (creation: indique si on est en création de boite, pour les compartiments)
     Long boxId = formData.getId().getValue();
+    Boolean achat = formData.isLotAchat();
     
     PartsRowData[] partsRows = formData.getParts().getRows();
+    Map<Long,Long> createdBinsIds = new HashMap<>();
+    
+    // Boite principale si on est en train de copier
+    Long copiedId = formData.getCopiedId();
+    if (copiedId !=0L) {
+      createdBinsIds.put(copiedId, boxId);
+    }
     
     for (PartsRowData partData: partsRows) {
       // Le conteneur peut être la boite ou un compartiment
       Long actualContainerId = boxId;
-      Long binId = partData.getBin();
+      Long binId = partData.getBin();  // Attention, en création il faut copier le compatiment
       if (binId!=null && binId!=0L) {
+        // En création il faut copier le compatiment (et éventuellement ses parents)
+        if (creation) {
+          // Copier ou récupérer la copie
+          binId = copyCompartment(binId, achat, createdBinsIds);
+        }
         actualContainerId = binId;
       }
       
@@ -350,9 +405,9 @@ public class BoxService implements IBoxService {
             );
       }
     }
-    storeParts(toBoxData);
+    storeParts(toBoxData, false);
     for (BoxFormData boxData: allFromBoxData.values()) {
-      storeParts(boxData);
+      storeParts(boxData, false);
     }
     
     return fromBoxData; 

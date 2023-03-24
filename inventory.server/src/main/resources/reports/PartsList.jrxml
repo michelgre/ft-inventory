@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PartsList" columnCount="2" printOrder="Horizontal" pageWidth="496" pageHeight="705" columnWidth="234" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" isTitleNewPage="true" isSummaryNewPage="true" uuid="30b1f22d-152a-4797-90c7-480ba699612c">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="data\Jasper Studio\InventoryDataAdapter.xml"/>
 	<property name="net.sf.jasperreports.print.create.bookmarks" value="true"/>
 	<parameter name="BoxCondition" class="java.lang.String"/>
 	<parameter name="InventoryBoxURL" class="java.lang.String"/>
@@ -11,9 +11,9 @@
 	b.label box_label,
 	p.id part_id,
 	coalesce( pl1.label,pl2.label) part_label,
-	bc.count,
+	coalesce( bc.count,0) count,
 	bin.id bin_id,
-	bin.label bin_label,
+	coalesce( bin.label, '') bin_label,
 	i.tn_100, 
 	REPLACE('$P!{InventoryBoxURL}','{id}',CAST(b.id as varchar)) as qrCode
 FROM box b

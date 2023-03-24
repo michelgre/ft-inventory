@@ -51,6 +51,24 @@ public class BoxFormData extends AbstractFormData {
     return getFieldByClass(Color.class);
   }
 
+  /**
+   * access method for property CopiedId.
+   */
+  public Long getCopiedId() {
+    return getCopiedIdProperty().getValue();
+  }
+
+  /**
+   * access method for property CopiedId.
+   */
+  public void setCopiedId(Long copiedId) {
+    getCopiedIdProperty().setValue(copiedId);
+  }
+
+  public CopiedIdProperty getCopiedIdProperty() {
+    return getPropertyByClass(CopiedIdProperty.class);
+  }
+
   public Description getDescription() {
     return getFieldByClass(Description.class);
   }
@@ -170,6 +188,10 @@ public class BoxFormData extends AbstractFormData {
   }
 
   public static class Color extends AbstractValueFieldData<Long> {
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class CopiedIdProperty extends AbstractPropertyData<Long> {
     private static final long serialVersionUID = 1L;
   }
 

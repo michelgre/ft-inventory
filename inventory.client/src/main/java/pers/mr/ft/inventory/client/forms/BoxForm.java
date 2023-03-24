@@ -92,6 +92,7 @@ public class BoxForm extends AbstractForm {
   private boolean lotAchat = false;
   private Long kitId = 0L;
   private List<Document> documents = new LinkedList<>();
+  private Long copiedId = 0L;
   
   @FormData
   public Long getBoxId() {
@@ -136,6 +137,16 @@ public class BoxForm extends AbstractForm {
     }
   }
   
+  @FormData
+  public Long getCopiedId() {
+    return copiedId;
+  }
+
+  @FormData
+  public void setCopiedId(Long copiedId) {
+    this.copiedId = copiedId;
+  }
+
   @Override
   protected String getConfiguredTitle() {
     return TEXTS.get("Box");
@@ -1481,6 +1492,7 @@ public class BoxForm extends AbstractForm {
       exportFormData(formData);
       formData = service.prepareCreate(formData);
       importFormData(formData);
+      getBoughtSetField().setValue(lotAchat);
       
       setEnabledPermission(new CreateBoxPermission());
     }
