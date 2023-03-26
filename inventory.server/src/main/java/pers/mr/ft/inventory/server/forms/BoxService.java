@@ -220,7 +220,7 @@ public class BoxService implements IBoxService {
     binData.setBoxId(binId);
     binData = load(binData);
     binData.setBoxId(0L);  // A créer
-    binData.setLotAchat(achat); // Le compartiment a le même statut que le conteneur principal
+    binData.getBoughtSet().setValue(achat);// Le compartiment a le même statut que le conteneur principal
 
     // Y-a-t-il un compartiment parent ?
     Long parentId = binData.getParent().getValue();
@@ -241,7 +241,7 @@ public class BoxService implements IBoxService {
   private void storeParts(BoxFormData formData, boolean creation) {
     // Enregistre le contenu (creation: indique si on est en création de boite, pour les compartiments)
     Long boxId = formData.getId().getValue();
-    Boolean achat = formData.isLotAchat();
+    Boolean achat = formData.getBoughtSet().getValue();
     
     PartsRowData[] partsRows = formData.getParts().getRows();
     Map<Long,Long> createdBinsIds = new HashMap<>();
@@ -266,7 +266,7 @@ public class BoxService implements IBoxService {
       }
       
       if (partData.getRowState()==AbstractTableRowData.STATUS_INSERTED) {
-        Object [][] res = SQL.select("SELECT count FROM box_contains WHERE container_id = :boxId and part_id = :id", partData, new NVPair("boxId", boxId));
+        Object [][] res = SQL.select("SELECT count FROM box_contains WHERE container_id = :boxId and part_id = :id", partData, new NVPair("boxId", actualContainerId));
         if (res.length>0) {
           partData.setOldId(partData.getId());
           partData.setRowState(AbstractTableRowData.STATUS_UPDATED);
