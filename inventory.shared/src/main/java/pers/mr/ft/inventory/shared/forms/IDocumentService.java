@@ -16,4 +16,8 @@ public interface IDocumentService extends IService {
   
   void storeContent(Long documentId, BinaryResource docContent);
   BinaryResource loadContent(Long documentId);
+  void updateDigests();
+  String computeDigest(BinaryResource docContent);
+  Long findDigest(String digest);
+  
 }

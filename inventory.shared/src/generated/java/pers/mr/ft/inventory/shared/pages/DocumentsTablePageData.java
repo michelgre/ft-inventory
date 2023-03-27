@@ -59,6 +59,7 @@ public class DocumentsTablePageData extends AbstractTablePageData {
     public static final String year = "year";
     public static final String usedInCount = "usedInCount";
     public static final String size = "size";
+    public static final String digest = "digest";
     private Long m_id;
     private String m_name;
     private String m_FTDBName;
@@ -68,6 +69,7 @@ public class DocumentsTablePageData extends AbstractTablePageData {
     private String m_year;
     private String m_usedInCount;
     private Long m_size;
+    private String m_digest;
 
     public Long getId() {
       return m_id;
@@ -139,6 +141,14 @@ public class DocumentsTablePageData extends AbstractTablePageData {
 
     public void setSize(Long newSize) {
       m_size = newSize;
+    }
+
+    public String getDigest() {
+      return m_digest;
+    }
+
+    public void setDigest(String newDigest) {
+      m_digest = newDigest;
     }
   }
 }

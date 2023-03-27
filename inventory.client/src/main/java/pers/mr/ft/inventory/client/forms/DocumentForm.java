@@ -45,6 +45,7 @@ import pers.mr.ft.inventory.shared.forms.UpdateDocumentPermission;
 import pers.mr.ft.inventory.client.forms.DocumentForm.MainBox.GroupBox.YearField;
 import pers.mr.ft.inventory.client.forms.DocumentForm.MainBox.OpenButton;
 import pers.mr.ft.inventory.client.forms.DocumentForm.MainBox.GroupBox.LangField;
+import pers.mr.ft.inventory.client.forms.DocumentForm.MainBox.GroupBox.ExtensionField;
 
 @FormData(value = DocumentFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class DocumentForm extends AbstractForm {
@@ -112,6 +113,10 @@ public class DocumentForm extends AbstractForm {
 
   public LangField getLangField() {
     return getFieldByClass(LangField.class);
+  }
+
+  public ExtensionField getExtensionField() {
+    return getFieldByClass(ExtensionField.class);
   }
 
   public NameField getNameField() {
@@ -353,6 +358,25 @@ public class DocumentForm extends AbstractForm {
         }
       }
 
+
+      @Order(11000)
+      public class ExtensionField extends AbstractStringField {
+        @Override
+        protected String getConfiguredLabel() {
+          return TEXTS.get("Extension");
+        }
+
+        @Override
+        protected byte getConfiguredLabelPosition() {
+          return LABEL_POSITION_TOP;
+        }
+        @Override
+        protected int getConfiguredMaxLength() {
+          return 20;
+        }
+      }
+
+      
       @Order(15000)
       public class PartsField extends AbstractPartsField {
 
@@ -477,7 +501,8 @@ public class DocumentForm extends AbstractForm {
       exportFormData(formData);
       formData = service.load(formData);
       importFormData(formData);
-
+      setTitle(formData.getName().getValue());
+      
       setEnabledPermission(new UpdateDocumentPermission());
     }
 

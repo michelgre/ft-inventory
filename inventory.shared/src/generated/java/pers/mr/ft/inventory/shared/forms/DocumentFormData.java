@@ -40,6 +40,10 @@ public class DocumentFormData extends AbstractFormData {
     return getFieldByClass(DocumentFileChooser.class);
   }
 
+  public Extension getExtension() {
+    return getFieldByClass(Extension.class);
+  }
+
   public FTDBId getFTDBId() {
     return getFieldByClass(FTDBId.class);
   }
@@ -77,6 +81,10 @@ public class DocumentFormData extends AbstractFormData {
   }
 
   public static class DocumentFileChooser extends AbstractValueFieldData<BinaryResource> {
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class Extension extends AbstractValueFieldData<String> {
     private static final long serialVersionUID = 1L;
   }
 

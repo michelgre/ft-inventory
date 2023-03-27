@@ -24,6 +24,7 @@ import org.eclipse.scout.rt.client.ui.messagebox.MessageBoxes;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.resource.BinaryResource;
+import org.eclipse.scout.rt.platform.status.IStatus;
 import org.eclipse.scout.rt.platform.text.TEXTS;
 import org.eclipse.scout.rt.platform.util.CollectionUtility;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
@@ -79,6 +80,10 @@ public class DocumentsTablePage extends AbstractPageWithTable<Table> {
 
     public SizeColumn getSizeColumn() {
       return getColumnSet().getColumnByClass(SizeColumn.class);
+    }
+
+    public DigestColumn getDigestColumn() {
+      return getColumnSet().getColumnByClass(DigestColumn.class);
     }
 
     public NameColumn getNameColumn() {
@@ -211,6 +216,24 @@ public class DocumentsTablePage extends AbstractPageWithTable<Table> {
         return 100;
       }
     }
+
+    @Order(9000)
+    public class DigestColumn extends AbstractStringColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("Digest");
+      }
+
+      @Override
+      protected boolean getConfiguredVisible() {
+        return false;
+      }
+      
+      @Override
+      protected int getConfiguredWidth() {
+        return 150;
+      }
+    }
     
     
     
@@ -306,6 +329,25 @@ public class DocumentsTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
+    @Order(7000)
+    public class UpdateAllDigestsMenu extends AbstractMenu {
+      @Override
+      protected String getConfiguredText() {
+        return TEXTS.get("UpdateAllDigests");
+      }
+
+      @Override
+      protected Set<? extends IMenuType> getConfiguredMenuTypes() {
+        return CollectionUtility.hashSet(TableMenuType.EmptySpace);
+      }
+
+      @Override
+      protected void execAction() {
+        IDocumentService service = BEANS.get(IDocumentService.class);
+        service.updateDigests();
+      }
+    }
+
     
     @Override
     protected Class<? extends IMenu> getConfiguredDefaultMenu() {
@@ -321,10 +363,25 @@ public class DocumentsTablePage extends AbstractPageWithTable<Table> {
         // Création de nouveau(x) document(s) ?
         if (t instanceof ResourceListTransferObject) {
           ResourceListTransferObject rlto = (ResourceListTransferObject) t;
+          IDocumentService service = BEANS.get(IDocumentService.class);
           for (BinaryResource document : rlto.getResources()) {
-            DocumentForm form = new DocumentForm();
-            form.addFormListener(new DocumentFormListener());
-            form.startNew(document);
+            // Vérifie que le contenu n'est pas déjà dans la base
+            String digest = service.computeDigest(document);
+            Long docId = service.findDigest(digest);
+            if (docId>0) {
+              MessageBoxes.createOk().withSeverity(IStatus.ERROR)
+                .withBody("Le contenu est déjà dans la base")
+                .show(IMessageBox.NO_OPTION);
+              DocumentForm form = new DocumentForm();
+              form.addFormListener(new DocumentFormListener());
+              form.setDocId(docId);
+              form.startModify();
+            }
+            else {
+              DocumentForm form = new DocumentForm();
+              form.addFormListener(new DocumentFormListener());
+              form.startNew(document);
+            }
           }
         }
       }
