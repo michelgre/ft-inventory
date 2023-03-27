@@ -72,8 +72,8 @@ public class BoxService implements IBoxService {
     Long userId = principal.getId();
     
     // Box data
-    SQL.insert("INSERT INTO box (boxtype_id, parentid, location_id, label, description, color_id, length, width, height, remarks, model_id, lot_achat, given, user_id) " +
-        " VALUES (:boxType, :parent, :location, :label, :description, :color, :length, :width, :height, :remarks, :model, :boughtSet, :given, :userId)",
+    SQL.insert("INSERT INTO box (boxtype_id, parentid, location_id, label, description, color_id, length, width, height, remarks, model_id, lot_achat, given, cout_achat, user_id) " +
+        " VALUES (:boxType, :parent, :location, :label, :description, :color, :length, :width, :height, :remarks, :model, :boughtSet, :given, :buyCost, :userId)",
         formData, new NVPair("userId", userId));
     Object[][] rows = SQL.select("SELECT LASTVAL()");
     Long boxId = (Long) rows[0][0];
@@ -101,10 +101,10 @@ public class BoxService implements IBoxService {
     String userLanguage = ServerSession.get().getSessionLanguage();
     String defaultLanguage =  ServerSession.get().getDefaultLanguage();
 
-    String query = "SELECT id, label, boxtype_id, description, parentid, location_id, color_id, length, width, height, remarks, model_id, lot_achat, given " +
+    String query = "SELECT id, label, boxtype_id, description, parentid, location_id, color_id, length, width, height, remarks, model_id, lot_achat, given, cout_achat " +
         " FROM box " +
         " WHERE id = :boxId " +
-        " INTO :id, :label, :boxType, :description, :parent, :location, :color, :length, :width, :height, :remarks, :model, :boughtSet, :given";
+        " INTO :id, :label, :boxType, :description, :parent, :location, :color, :length, :width, :height, :remarks, :model, :boughtSet, :given, :buyCost ";
     SQL.selectInto(query, formData);
     
     String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, bc.count, pc.count, p.color_id, COALESCE (p.cost, 0.0), COALESCE (bc.count * p.cost, 0.0), bc.bin_id, pc.ftdb_count, inv_sum " +
@@ -197,6 +197,7 @@ public class BoxService implements IBoxService {
         "remarks = :remarks, " +
         "model_id = :model, " +
         "lot_achat = :boughtSet, " +
+        "cout_achat = :buyCost, " +
         "given = :given " +
         "WHERE id = :id", 
         formData);

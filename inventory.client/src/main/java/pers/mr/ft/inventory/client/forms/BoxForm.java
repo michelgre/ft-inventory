@@ -1,5 +1,6 @@
 package pers.mr.ft.inventory.client.forms;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,7 @@ import org.eclipse.scout.rt.client.ui.desktop.OpenUriAction;
 import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
 import org.eclipse.scout.rt.client.ui.form.IForm;
+import org.eclipse.scout.rt.client.ui.form.fields.bigdecimalfield.AbstractBigDecimalField;
 import org.eclipse.scout.rt.client.ui.form.fields.booleanfield.AbstractBooleanField;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractCancelButton;
@@ -85,6 +87,7 @@ import pers.mr.ft.inventory.shared.forms.UpdateBoxPermission;
 import pers.mr.ft.inventory.shared.lookup.BoxLookupCall;
 import pers.mr.ft.inventory.shared.lookup.BoxTypeLookupCall;
 import pers.mr.ft.inventory.shared.model.Document;
+import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BuyCostField;
 
 @FormData(value = BoxFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class BoxForm extends AbstractForm {
@@ -244,6 +247,10 @@ public class BoxForm extends AbstractForm {
 
   public GivenField getGivenField() {
     return getFieldByClass(GivenField.class);
+  }
+
+  public BuyCostField getBuyCostField() {
+    return getFieldByClass(BuyCostField.class);
   }
 
   public OkButton getOkButton() {
@@ -768,6 +775,11 @@ public class BoxForm extends AbstractForm {
           protected boolean getConfiguredStatusVisible() {
             return false;
           }
+          @Override
+          protected void execChangedValue() {
+            setupFields();
+          }
+          
         }
 
         @Order(16000)
@@ -784,6 +796,56 @@ public class BoxForm extends AbstractForm {
           protected boolean getConfiguredStatusVisible() {
             return false;
           }
+        }
+
+        @Order(17000)
+        public class BuyCostField extends AbstractDecimalField<Double> {
+          @Override
+          protected String getConfiguredLabel() {
+            return TEXTS.get("BuyCost");
+          }
+
+          @Override
+          protected byte getConfiguredLabelPosition() {
+            return LABEL_POSITION_TOP;
+          }
+          
+          @Override
+          protected boolean getConfiguredStatusVisible() {
+            return false;
+          }
+
+          @Override
+          protected boolean getConfiguredVisible() {
+            return false;
+          }
+          
+          @Override
+          protected Double getConfiguredMinValue() {
+            return 0.0;
+          }
+
+          @Override
+          protected Double getConfiguredMaxValue() {
+            return 9999.99;
+          }
+
+          @Override
+          protected Double getMinPossibleValue() {
+            return 0.0;
+          }
+
+          @Override
+          protected Double getMaxPossibleValue() {
+            return 9999.99;
+          }
+
+          @Override
+          protected Double parseValueInternal(String text) {
+            text = text.replaceAll(" ", "").replaceAll(",", ".");
+            return Double.parseDouble(text);
+          }
+
         }
 
         
@@ -1494,6 +1556,7 @@ public class BoxForm extends AbstractForm {
       importFormData(formData);
       getBoughtSetField().setValue(lotAchat);
       
+      setupFields();
       setEnabledPermission(new CreateBoxPermission());
     }
 
@@ -1551,6 +1614,7 @@ public class BoxForm extends AbstractForm {
         documentsMenu.setVisible(false);
       }
       
+      setupFields();
       setEnabledPermission(new UpdateBoxPermission());
     }
 
@@ -1561,6 +1625,12 @@ public class BoxForm extends AbstractForm {
       exportFormData(formData);
       service.store(formData);
     }
+  }
+  
+  private void setupFields() {
+    boolean lotAchat = getBoughtSetField().getValue();
+    getGivenField().setVisible(!lotAchat);
+    getBuyCostField().setVisible(lotAchat);
   }
   
   public void gotoPart(Long partId) {

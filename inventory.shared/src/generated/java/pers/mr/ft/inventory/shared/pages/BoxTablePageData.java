@@ -64,6 +64,7 @@ public class BoxTablePageData extends AbstractTablePageData {
     public static final String given = "given";
     public static final String height = "height";
     public static final String boxType = "boxType";
+    public static final String buyCost = "buyCost";
     public static final String description = "description";
     private Long m_id;
     private Boolean m_referential;
@@ -79,6 +80,7 @@ public class BoxTablePageData extends AbstractTablePageData {
     private Boolean m_given;
     private Long m_height;
     private Long m_boxType;
+    private Double m_buyCost;
     private String m_description;
 
     public Long getId() {
@@ -191,6 +193,14 @@ public class BoxTablePageData extends AbstractTablePageData {
 
     public void setBoxType(Long newBoxType) {
       m_boxType = newBoxType;
+    }
+
+    public Double getBuyCost() {
+      return m_buyCost;
+    }
+
+    public void setBuyCost(Double newBuyCost) {
+      m_buyCost = newBuyCost;
     }
 
     public String getDescription() {

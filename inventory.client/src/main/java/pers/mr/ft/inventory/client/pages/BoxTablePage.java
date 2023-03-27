@@ -17,6 +17,7 @@ import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractDecimalColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractIntegerColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractSmartColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractStringColumn;
+import org.eclipse.scout.rt.client.ui.basic.table.columns.INumberColumn;
 import org.eclipse.scout.rt.client.ui.basic.tree.ITreeNode;
 import org.eclipse.scout.rt.client.ui.desktop.OpenUriAction;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithTable;
@@ -183,10 +184,11 @@ public class BoxTablePage extends AbstractPageWithTable<Table> {
   @Override
   protected void execInitTable() {
     super.execInitTable();
-    getTable().getDiffPartCountColumn().setAggregationFunction("none");
-    getTable().getLengthColumn().setAggregationFunction("none");
-    getTable().getWidthColumn().setAggregationFunction("none");
-    getTable().getHeightColumn().setAggregationFunction("none");
+    getTable().getIdColumn().setAggregationFunction(INumberColumn.AggregationFunction.NONE);
+    getTable().getDiffPartCountColumn().setAggregationFunction(INumberColumn.AggregationFunction.NONE);
+    getTable().getLengthColumn().setAggregationFunction(INumberColumn.AggregationFunction.NONE);
+    getTable().getWidthColumn().setAggregationFunction(INumberColumn.AggregationFunction.NONE);
+    getTable().getHeightColumn().setAggregationFunction(INumberColumn.AggregationFunction.NONE);
   }
   
 
@@ -229,7 +231,15 @@ public class BoxTablePage extends AbstractPageWithTable<Table> {
       values.add(0);
       state.setSelectedValues(values);
       getUserFilterManager().addFilter(state);  
-      */    
+      */   
+      
+      if (lotAchat) {
+        getBuyCostColumn().setVisible(true);
+        getGivenColumn().setVisibleGranted(false);
+      }
+      else {
+        getBuyCostColumn().setVisibleGranted(false);
+      }
     }
     
     public ReferentialColumn getReferentialColumn() {
@@ -278,6 +288,10 @@ public class BoxTablePage extends AbstractPageWithTable<Table> {
 
     public BoxTypeColumn getBoxTypeColumn() {
       return getColumnSet().getColumnByClass(BoxTypeColumn.class);
+    }
+
+    public BuyCostColumn getBuyCostColumn() {
+      return getColumnSet().getColumnByClass(BuyCostColumn.class);
     }
 
     public PartCountColumn getPartCountColumn() {
@@ -824,6 +838,41 @@ public class BoxTablePage extends AbstractPageWithTable<Table> {
       @Override
       protected boolean getConfiguredVisible() {
         return false;
+      }
+    }
+
+
+
+    @Order(11000)
+    public class BuyCostColumn extends AbstractDecimalColumn<Double> {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("BuyCost");
+      }
+
+      @Override
+      protected boolean getConfiguredVisible() {
+        return false;
+      }
+      
+      @Override
+      protected int getConfiguredWidth() {
+        return 89;
+      }
+
+      @Override
+      protected IDecimalField<Double> createDefaultEditor() {
+        return null;
+      }
+
+      @Override
+      protected Double getConfiguredMinValue() {
+        return null;
+      }
+
+      @Override
+      protected Double getConfiguredMaxValue() {
+        return null;
       }
     }
 

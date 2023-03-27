@@ -22,4 +22,10 @@ public class AbstractIdColumn extends AbstractLongColumn {
   protected boolean getConfiguredGroupingUsed() {
     return false;
   }
+  /* Sans effet ?!?
+  @Override
+  protected String getConfiguredAggregationFunction() {
+    return INumberColumn.AggregationFunction.NONE;
+  }
+  */
 }

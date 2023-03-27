@@ -47,6 +47,10 @@ public class BoxFormData extends AbstractFormData {
     return getFieldByClass(BoxType.class);
   }
 
+  public BuyCost getBuyCost() {
+    return getFieldByClass(BuyCost.class);
+  }
+
   public Color getColor() {
     return getFieldByClass(Color.class);
   }
@@ -184,6 +188,10 @@ public class BoxFormData extends AbstractFormData {
   }
 
   public static class BoxType extends AbstractValueFieldData<Long> {
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class BuyCost extends AbstractValueFieldData<Double> {
     private static final long serialVersionUID = 1L;
   }
 

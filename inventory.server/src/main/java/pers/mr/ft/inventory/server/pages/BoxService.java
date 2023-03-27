@@ -110,10 +110,10 @@ public class BoxService implements IBoxService {
         "(SELECT SUM (count * COALESCE(cost, 0.0)) FROM v_box_contains bc LEFT JOIN part p ON bc.part_id = p.id WHERE container_id = b.id) , " +
         "location_id, model_id, parentid, " + 
         "length, width, height, description, boxtype_id, " +
-        "given " +
+        "given, cout_achat " +
         "FROM box b " + 
         cond +
-        "INTO :{page.id}, :{page.label}, :{page.partCount}, :{page.diffPartCount}, :{page.value}, :{page.location}, :{page.model}, :{page.includedIn}, :{page.length}, :{page.width}, :{page.height}, :{page.description}, :{page.boxType}, :{page.given}";
+        "INTO :{page.id}, :{page.label}, :{page.partCount}, :{page.diffPartCount}, :{page.value}, :{page.location}, :{page.model}, :{page.includedIn}, :{page.length}, :{page.width}, :{page.height}, :{page.description}, :{page.boxType}, :{page.given}, :{page.buyCost} ";
     SQL.selectInto(query, new NVPair("page", pageData), new NVPair("filter", filter.getFormData()));
     return pageData;
   }
