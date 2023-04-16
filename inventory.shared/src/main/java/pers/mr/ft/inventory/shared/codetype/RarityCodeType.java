@@ -25,7 +25,7 @@ public class RarityCodeType extends AbstractCodeType<String, Integer> {
     codes.add(new CodeRow<>(2, TEXTS.get("RarityVeryRare")));
     codes.add(new CodeRow<>(3, TEXTS.get("RarityExtremelyRare")));
     codes.add(new CodeRow<>(4, TEXTS.get("RarityNotAvailable")));
-
+    codes.add(new CodeRow<>(99, TEXTS.get("Custom")));
     return codes;
   }
 }

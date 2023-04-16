@@ -37,6 +37,17 @@ public class PartService implements IPartService {
     if (!ACCESS.check(new CreatePartPermission())) {
       throw new VetoException(TEXTS.get("AuthorizationFailed"));
     }
+    
+    Long partId = formData.getPartId();
+    if (partId>0L) {
+      formData = load(formData);
+      
+      // Raz les informations qui ne sont pas à copier
+      formData.getId().setValue(0L);
+      formData.getDatenbankUUID().setValue("");
+      formData.getBoxes().clearRows();
+      formData.getKits().clearRows();
+    }
     return formData;
   }
 
@@ -45,7 +56,25 @@ public class PartService implements IPartService {
     if (!ACCESS.check(new CreatePartPermission())) {
       throw new VetoException(TEXTS.get("AuthorizationFailed"));
     }
-    // TODO [michel] add business logic here.
+    
+    // TODO: Choix de langue dans la session
+    String userLanguage = ServerSession.get().getSessionLanguage();
+    ILabelService labelService = BEANS.get(ILabelService.class);
+
+    // Part ID
+    SQL.select("SELECT MAX(id)+1 FROM Part INTO :id", formData);
+    
+    // Labels
+    Long titleId = labelService.save(0L, userLanguage, formData.getTitle().getValue());
+    Long descriptionId = labelService.save(0L, userLanguage, formData.getDescription().getValue());
+    
+    SQL.insert("INSERT INTO Part (id, type_id, color_id, weight, cost, rarity, title_id, description_id, ft_cat) VALUES (:id, :partType, :color, :weight, :value, :rarity, :titleId, :descriptionId, :category)", 
+        formData,
+        new NVPair("titleId",titleId),
+        new NVPair("descriptionId",descriptionId));
+    
+    savePartNumbers(formData, new PartFormData());
+    
     return formData;
   }
 
@@ -153,25 +182,9 @@ public class PartService implements IPartService {
     return load(formData, "p.id = "+partId);
   }
 
-  @Override
-  public PartFormData store(PartFormData formData) {
-    if (!ACCESS.check(new UpdatePartPermission())) {
-      throw new VetoException(TEXTS.get("AuthorizationFailed"));
-    }
-    
-    // TODO: Choix de langue dans la session
-    String userLanguage = ServerSession.get().getSessionLanguage();
-
-    Long partId = formData.getId().getValue();
-    String query = "UPDATE part SET type_id = :partType, color_id = :color, weight = :weight, cost = :value, rarity = :rarity WHERE id = :id";
-    SQL.update(query, formData);
-    
-    // Anciennes valeurs
-    PartFormData oldFormData = new PartFormData();
-    oldFormData.setPartId(partId);
-    oldFormData = load(oldFormData);
-    
+  private void savePartNumbers(PartFormData formData, PartFormData oldFormData) {
     // Part Numbers : [year:]number [, [year:]number] ...
+    Long partId = formData.getId().getValue();
     String newPartNumbers = formData.getPartNumbers().getValue();
     if (newPartNumbers!=null && !newPartNumbers.equals(oldFormData.getPartNumbers().getValue())) {
       boolean valueOk = true;
@@ -207,6 +220,27 @@ public class PartService implements IPartService {
         throw new VetoException ("Erreur dans les n° de pièce");
       }
     }
+  }
+  
+  @Override
+  public PartFormData store(PartFormData formData) {
+    if (!ACCESS.check(new UpdatePartPermission())) {
+      throw new VetoException(TEXTS.get("AuthorizationFailed"));
+    }
+    
+    // TODO: Choix de langue dans la session
+    String userLanguage = ServerSession.get().getSessionLanguage();
+
+    Long partId = formData.getId().getValue();
+    String query = "UPDATE part SET type_id = :partType, color_id = :color, weight = :weight, cost = :value, rarity = :rarity, ft_cat = :category WHERE id = :id";
+    SQL.update(query, formData);
+    
+    // Anciennes valeurs
+    PartFormData oldFormData = new PartFormData();
+    oldFormData.setPartId(partId);
+    oldFormData = load(oldFormData);
+    
+    savePartNumbers(formData, oldFormData);
     
     // Libellés
     ILabelService labelService = BEANS.get(ILabelService.class);

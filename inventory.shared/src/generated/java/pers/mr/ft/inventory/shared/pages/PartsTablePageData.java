@@ -61,6 +61,8 @@ public class PartsTablePageData extends AbstractTablePageData {
     public static final String inventoryCount = "inventoryCount";
     public static final String value = "value";
     public static final String docsCount = "docsCount";
+    public static final String rarity = "rarity";
+    public static final String datenbankUUID = "datenbankUUID";
     private Long m_id;
     private String m_partNumber;
     private String m_icon;
@@ -72,6 +74,8 @@ public class PartsTablePageData extends AbstractTablePageData {
     private Integer m_inventoryCount;
     private Double m_value;
     private Integer m_docsCount;
+    private Integer m_rarity;
+    private String m_datenbankUUID;
 
     public Long getId() {
       return m_id;
@@ -159,6 +163,22 @@ public class PartsTablePageData extends AbstractTablePageData {
 
     public void setDocsCount(Integer newDocsCount) {
       m_docsCount = newDocsCount;
+    }
+
+    public Integer getRarity() {
+      return m_rarity;
+    }
+
+    public void setRarity(Integer newRarity) {
+      m_rarity = newRarity;
+    }
+
+    public String getDatenbankUUID() {
+      return m_datenbankUUID;
+    }
+
+    public void setDatenbankUUID(String newDatenbankUUID) {
+      m_datenbankUUID = newDatenbankUUID;
     }
   }
 }

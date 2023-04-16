@@ -32,6 +32,7 @@ public class UiServletFilter implements Filter {
   private TrivialAccessController m_trivialAccessController;
   private FormBasedAccessController m_formBasedAccessController;
   private DevelopmentAccessController m_developmentAccessController;
+  private PersistentSessionController m_persistentSessionController;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -46,6 +47,7 @@ public class UiServletFilter implements Filter {
     m_formBasedAccessController = fbc
         .init(new FormBasedAuthConfig().withCredentialVerifier(BEANS.get(DataSourceCredentialVerifier.class)));
     m_developmentAccessController = BEANS.get(DevelopmentAccessController.class).init(new DevelopmentAuthConfig());
+    m_persistentSessionController = BEANS.get(PersistentSessionController.class).init();
   }
 
   @Override
@@ -54,11 +56,24 @@ public class UiServletFilter implements Filter {
     final HttpServletRequest req = (HttpServletRequest) request;
     final HttpServletResponse resp = (HttpServletResponse) response;
 
+    // Effacer le cookie persistant en cas de logout
+    m_persistentSessionController.handleLogout(req, resp, chain);
+    
+    // Traitement si session en cours
     if (m_trivialAccessController.handle(req, resp, chain)) {
       return;
     }
 
+    // Gérer l'auto-login
+    if (m_persistentSessionController.handle(req, resp, chain)) {
+      if (m_trivialAccessController.handle(req, resp, chain)) {
+        return;
+      }
+    }
+    
     if (m_formBasedAccessController.handle(req, resp, chain)) {
+      // Enregistrer le cookie persistant
+      m_persistentSessionController.handleLogin(req, resp, chain);
       return;
     }
 

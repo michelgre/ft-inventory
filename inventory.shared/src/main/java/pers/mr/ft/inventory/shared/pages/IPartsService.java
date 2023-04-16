@@ -7,4 +7,5 @@ import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 @TunnelToServer
 public interface IPartsService extends IService {
   PartsTablePageData getPartsTableData(SearchFilter filter, boolean buildingKits);
+  void delete(Long partId);
 }

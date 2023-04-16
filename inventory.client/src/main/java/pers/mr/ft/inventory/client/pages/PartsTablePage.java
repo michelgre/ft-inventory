@@ -28,6 +28,9 @@ import org.eclipse.scout.rt.client.ui.dnd.TransferObject;
 import org.eclipse.scout.rt.client.ui.form.FormEvent;
 import org.eclipse.scout.rt.client.ui.form.FormListener;
 import org.eclipse.scout.rt.client.ui.form.fields.decimalfield.IDecimalField;
+import org.eclipse.scout.rt.client.ui.messagebox.IMessageBox;
+import org.eclipse.scout.rt.client.ui.messagebox.MessageBox;
+import org.eclipse.scout.rt.client.ui.messagebox.MessageBoxes;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.resource.BinaryResource;
@@ -49,6 +52,7 @@ import pers.mr.ft.inventory.client.forms.PartSearchForm;
 import pers.mr.ft.inventory.client.pages.PartsTablePage.Table;
 import pers.mr.ft.inventory.shared.codetype.CategoryCodeType;
 import pers.mr.ft.inventory.shared.codetype.ColorCodeType;
+import pers.mr.ft.inventory.shared.codetype.RarityCodeType;
 import pers.mr.ft.inventory.shared.forms.IPartService;
 import pers.mr.ft.inventory.shared.pages.IPartsService;
 import pers.mr.ft.inventory.shared.pages.PartsTablePageData;
@@ -122,6 +126,14 @@ public class PartsTablePage extends AbstractPageWithTable<Table> {
 
     public ValueColumn getValueColumn() {
       return getColumnSet().getColumnByClass(ValueColumn.class);
+    }
+
+    public DatenbankUUIDColumn getDatenbankUUIDColumn() {
+      return getColumnSet().getColumnByClass(DatenbankUUIDColumn.class);
+    }
+
+    public RarityColumn getRarityColumn() {
+      return getColumnSet().getColumnByClass(RarityColumn.class);
     }
 
     public PartNumberColumn getPartNumberColumn() {
@@ -277,6 +289,41 @@ public class PartsTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
+    @Order(9500)
+    public class RarityColumn extends AbstractSmartColumn<Integer> {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("Rarity");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 134;
+      }
+      @Override
+      protected Class<? extends ICodeType<String, Integer>> getConfiguredCodeType() {
+        return RarityCodeType.class;
+      }
+    }
+    
+    @Order(10000)
+    public class DatenbankUUIDColumn extends AbstractStringColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("DatenbankUUID");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 270;
+      }
+      
+      @Override
+      protected boolean getConfiguredVisible() {
+        return false;
+      }
+    }
+
     
     
     // =============================================================================
@@ -416,6 +463,62 @@ public class PartsTablePage extends AbstractPageWithTable<Table> {
           service.syncImagesFromDatenbank(partId);
         }
         reloadPage();
+      }
+    }
+
+    @Order(7000)
+    public class CreatePartMenu extends AbstractMenu {
+      @Override
+      protected String getConfiguredText() {
+        return TEXTS.get("CreatePart");
+      }
+
+      @Override
+      protected Set<? extends IMenuType> getConfiguredMenuTypes() {
+        return CollectionUtility.hashSet(TableMenuType.SingleSelection, TableMenuType.EmptySpace);
+      }
+
+      @Override
+      protected void execAction() {
+        // Créer une pièce custom à partir d'une pièce existante ou de rien
+        PartForm form = new PartForm();
+        if (getSelectedRowCount()==1) {
+          form.setPartId(getIdColumn().getSelectedValue());
+        }
+        form.addFormListener(new PartFormListener());
+        form.startNew();
+      }
+    }
+
+    @Order(8000)
+    public class DeletePartMenu extends AbstractMenu {
+      @Override
+      protected String getConfiguredText() {
+        return TEXTS.get("DeletePart");
+      }
+
+      @Override
+      protected Set<? extends IMenuType> getConfiguredMenuTypes() {
+        return CollectionUtility.hashSet(TableMenuType.SingleSelection, TableMenuType.MultiSelection);
+      }
+
+      @Override
+      protected void execAction() {
+        
+        List<ITableRow> rows = getSelectedRows();
+        int res = MessageBoxes.createYesNo()
+                          .withHeader(TEXTS.get("TitleConfirmDeleteParts"))
+                          .withBody(TEXTS.get("ConfirmDeleteParts", String.valueOf(rows.size())))
+                          .withYesButtonText(TEXTS.get("Delete"))
+                          .show(IMessageBox.NO_OPTION);
+        if (res==IMessageBox.YES_OPTION) {
+          IPartsService service = BEANS.get(IPartsService.class);
+          IdColumn idCol = getIdColumn();
+          for (Long partId: idCol.getSelectedValues()) {
+            service.delete(partId);
+          }
+          reloadPage();
+        }
       }
     }
     

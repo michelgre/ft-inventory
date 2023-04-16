@@ -1,6 +1,10 @@
 package pers.mr.ft.inventory.ui.html;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.scout.rt.platform.Bean;
 import org.eclipse.scout.rt.platform.Replace;
@@ -8,10 +12,14 @@ import org.eclipse.scout.rt.platform.util.ImmutablePair;
 import org.eclipse.scout.rt.platform.util.Pair;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.server.commons.authentication.FormBasedAccessController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Bean
 @Replace
 public class MyFormBasedAccessController extends FormBasedAccessController {
+  private static final Logger logger = LoggerFactory.getLogger(MyFormBasedAccessController.class);
+  
   @Override
   protected Pair<String, char[]> readCredentials(HttpServletRequest request) {
     String typedUser = request.getParameter("user");
@@ -36,4 +44,9 @@ public class MyFormBasedAccessController extends FormBasedAccessController {
     // We do it nevertheless to prevent accidental logging of passwords.
     return new ImmutablePair<>(user, password.toCharArray());
   }
+  
+  protected boolean handleAuthRequest(final HttpServletRequest request, final HttpServletResponse response) throws IOException, ServletException {
+    return super.handleAuthRequest(request, response);
+  }
+
 }

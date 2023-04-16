@@ -1,12 +1,15 @@
 package pers.mr.ft.inventory.server.pages;
 
+import org.eclipse.scout.rt.platform.exception.VetoException;
 import org.eclipse.scout.rt.platform.holders.NVPair;
+import org.eclipse.scout.rt.platform.text.TEXTS;
+import org.eclipse.scout.rt.security.ACCESS;
 import org.eclipse.scout.rt.server.jdbc.SQL;
 import org.eclipse.scout.rt.shared.data.form.AbstractFormData;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 
 import pers.mr.ft.inventory.server.ServerSession;
-import pers.mr.ft.inventory.shared.forms.BoxSearchFormData;
+import pers.mr.ft.inventory.shared.forms.DeletePartPermission;
 import pers.mr.ft.inventory.shared.forms.PartSearchFormData;
 import pers.mr.ft.inventory.shared.pages.IPartsService;
 import pers.mr.ft.inventory.shared.pages.PartsTablePageData;
@@ -67,7 +70,8 @@ public class PartsService implements IPartsService {
     
     String query = "SELECT " + 
         " p.id, part_numbers, part_icon, color_id, part_label, default_label, ft_cat, kit_sum, cost, " + invCount + ", " +
-        " (SELECT NULLIF(count(*),0) FROM doc_part WHERE part_id = id)" +
+        " (SELECT NULLIF(count(*),0) FROM doc_part WHERE part_id = id)," +
+        " p.ft_variant_uuid, p.rarity " +
         " FROM v_parts_page p " + 
         cond +
         /*
@@ -80,7 +84,7 @@ public class PartsService implements IPartsService {
         " LEFT JOIN v_part_numbers pn ON pn.part_id = p.id " +        
          */
         " ORDER BY default_label " +
-        " INTO :{page.id}, :{page.partNumber}, :{page.icon}, :{page.color}, :{page.title}, :{page.defaultTitle}, :{page.category}, :{page.partsCount}, :{page.value}, :{page.inventoryCount}, :{page.docsCount}";
+        " INTO :{page.id}, :{page.partNumber}, :{page.icon}, :{page.color}, :{page.title}, :{page.defaultTitle}, :{page.category}, :{page.partsCount}, :{page.value}, :{page.inventoryCount}, :{page.docsCount}, :{page.datenbankUUID}, :{page.rarity} ";
     SQL.selectInto(query, 
         new NVPair("page", pageData), 
         new NVPair("userLanguage", userLanguage), 
@@ -88,5 +92,13 @@ public class PartsService implements IPartsService {
         new NVPair("userId", userId),
         new NVPair("filter", filter.getFormData()));
     return pageData;
+  }
+  
+  public void delete(Long partId) {
+    if (!ACCESS.check(new DeletePartPermission())) {
+      throw new VetoException(TEXTS.get("AuthorizationFailed"));
+    }
+
+    SQL.delete("DELETE FROM part WHERE id = :partId", new NVPair("partId", partId));
   }
 }

@@ -1252,6 +1252,7 @@ public class PartForm extends AbstractForm {
       IPartService service = BEANS.get(IPartService.class);
       PartFormData formData = new PartFormData();
       exportFormData(formData);
+      formData.setPartId(getPartId());
       formData = service.prepareCreate(formData);
       importFormData(formData);
 

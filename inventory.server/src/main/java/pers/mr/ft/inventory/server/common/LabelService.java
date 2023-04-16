@@ -41,22 +41,16 @@ public class LabelService implements ILabelService {
       // N'existe pas
       if (id == 0) {
         // Le label n'existe pas non plus
-        SQL.insert("INSERT INTO multilingual_label (langcode, label, version) VALUES (:lang, :value, :version)" , 
-            new NVPair("lang", lang),
-            new NVPair("value", value),
-            new NVPair("version", 1));
-        rows = SQL.select("SELECT LASTVAL()");
+        rows = SQL.select("SELECT MAX(id)+1 FROM multilingual_label");
         id = (Long) rows[0][0];
       }
-      else {
-        // Le label existe mais pas dans cette langue
-        SQL.insert("INSERT INTO multilingual_label (id, langcode, label, version) VALUES (:id, :lang, :value, :version)" , 
-            new NVPair("id", id),
-            new NVPair("lang", lang),
-            new NVPair("value", value),
-            new NVPair("version", 1)
-            );
-      }
+      // Le label existe mais pas dans cette langue
+      SQL.insert("INSERT INTO multilingual_label (id, langcode, label, version) VALUES (:id, :lang, :value, :version)" , 
+          new NVPair("id", id),
+          new NVPair("lang", lang),
+          new NVPair("value", value),
+          new NVPair("version", 1)
+          );
     }
     else {
       // Existe
