@@ -95,6 +95,10 @@ public class BoxFormData extends AbstractFormData {
     return getPropertyByClass(DocumentsProperty.class);
   }
 
+  public Full getFull() {
+    return getFieldByClass(Full.class);
+  }
+
   public Given getGiven() {
     return getFieldByClass(Given.class);
   }
@@ -208,6 +212,10 @@ public class BoxFormData extends AbstractFormData {
   }
 
   public static class DocumentsProperty extends AbstractPropertyData<List<Document>> {
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class Full extends AbstractValueFieldData<Boolean> {
     private static final long serialVersionUID = 1L;
   }
 

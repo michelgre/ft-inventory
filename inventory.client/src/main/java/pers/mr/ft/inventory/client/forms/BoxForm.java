@@ -1,6 +1,5 @@
 package pers.mr.ft.inventory.client.forms;
 
-import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -17,11 +16,11 @@ import org.eclipse.scout.rt.client.ui.desktop.OpenUriAction;
 import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
 import org.eclipse.scout.rt.client.ui.form.IForm;
-import org.eclipse.scout.rt.client.ui.form.fields.bigdecimalfield.AbstractBigDecimalField;
 import org.eclipse.scout.rt.client.ui.form.fields.booleanfield.AbstractBooleanField;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractCancelButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
+import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractSaveButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.IButton;
 import org.eclipse.scout.rt.client.ui.form.fields.decimalfield.AbstractDecimalField;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
@@ -57,12 +56,14 @@ import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BoughtSetField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BoxTypeField;
+import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BuyCostField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.ColorField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DescriptionField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DimensionsBox;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DimensionsBox.HeightField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DimensionsBox.LengthField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.DimensionsBox.WidthField;
+import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.FullField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.GivenField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.IdField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.LabelField;
@@ -73,6 +74,7 @@ import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.R
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.TotalValueField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.PartsField;
 import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.OkButton;
+import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.SaveButton;
 import pers.mr.ft.inventory.shared.codetype.ColorCodeType;
 import pers.mr.ft.inventory.shared.codetype.LocationCodeType;
 import pers.mr.ft.inventory.shared.codetype.ModelCodeType;
@@ -87,7 +89,6 @@ import pers.mr.ft.inventory.shared.forms.UpdateBoxPermission;
 import pers.mr.ft.inventory.shared.lookup.BoxLookupCall;
 import pers.mr.ft.inventory.shared.lookup.BoxTypeLookupCall;
 import pers.mr.ft.inventory.shared.model.Document;
-import pers.mr.ft.inventory.client.forms.BoxForm.MainBox.GroupBox.BoxFieldsBox.BuyCostField;
 
 @FormData(value = BoxFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class BoxForm extends AbstractForm {
@@ -253,6 +254,14 @@ public class BoxForm extends AbstractForm {
     return getFieldByClass(BuyCostField.class);
   }
 
+  public FullField getFullField() {
+    return getFieldByClass(FullField.class);
+  }
+
+  public SaveButton getSaveButton() {
+    return getFieldByClass(SaveButton.class);
+  }
+
   public OkButton getOkButton() {
     return getFieldByClass(OkButton.class);
   }
@@ -319,7 +328,7 @@ public class BoxForm extends AbstractForm {
         }
         @Override
         protected int getConfiguredGridColumnCount() {
-          return 10;
+          return 11;
         }
         
         @Override
@@ -336,6 +345,7 @@ public class BoxForm extends AbstractForm {
         protected String getConfiguredCssClass() {
           return "fieldbox";
         }
+        
         @Order(1000)
         public class IdField extends AbstractIdField {
         }
@@ -509,7 +519,7 @@ public class BoxForm extends AbstractForm {
           }
           @Override
           protected int getConfiguredGridW() {
-            return 4;
+            return 5;
           }
           
           @Override
@@ -675,6 +685,25 @@ public class BoxForm extends AbstractForm {
             return true;
           }
         }
+        
+        @Order(12500)
+        public class FullField extends AbstractBooleanField {
+          @Override
+          protected String getConfiguredLabel() {
+            return TEXTS.get("FullBox");
+          }
+          
+          @Override
+          protected byte getConfiguredLabelPosition() {
+            return LABEL_POSITION_TOP;
+          }
+          @Override
+          protected boolean getConfiguredStatusVisible() {
+            return false;
+          }
+        }
+
+        
         @Order(13000)
         public class ModelField extends AbstractSmartField<Long> {
           @Override
@@ -1469,6 +1498,11 @@ public class BoxForm extends AbstractForm {
 
     }
 
+    @Order(3500)
+    public class SaveButton extends AbstractSaveButton {
+    }
+
+    
     @Order(4000)
     public class EditMainBoxButton extends AbstractButton {
       @Override

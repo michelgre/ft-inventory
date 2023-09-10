@@ -121,11 +121,13 @@ public class PartService implements IPartService {
         new NVPair("userId", userId));
     
     // Boîtes contenant
-    String boxesQuery = "SELECT b.id, b.label, bc.count, b.lot_achat, b.location_id " +
+    String boxesQuery = "SELECT b.id, b.label, bc.count, b.lot_achat, b.location_id, vmbc.container_id, bp.label " + 
         " FROM box_contains bc " +
         " JOIN box b ON b.id = bc.container_id AND b.user_id = :userId " +
+        " LEFT JOIN LATERAL (SELECT container_id FROM v_box_contains WHERE bin_id = bc.container_id AND CONTAINER_ID IS NOT NULL LIMIT 1) vmbc ON TRUE " +
+        " LEFT JOIN box bp ON bp.id = vmbc.container_id " +
         " WHERE bc.part_id = :partId " + // AND NOT b.lot_achat
-        " INTO :{boxes.id}, :{boxes.label}, :{boxes.thisPartCount}, :{boxes.lotAchat}, :{boxes.location} ";
+        " INTO :{boxes.id}, :{boxes.label}, :{boxes.thisPartCount}, :{boxes.lotAchat}, :{boxes.location}, :{boxes.mainBoxId}, :{boxes.mainBox} ";
     SQL.selectInto(boxesQuery, 
         formData, 
         new NVPair("userLanguage", userLanguage), 

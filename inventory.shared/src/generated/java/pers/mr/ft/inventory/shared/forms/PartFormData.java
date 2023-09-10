@@ -193,11 +193,15 @@ public class PartFormData extends AbstractFormData {
       public static final String thisPartCount = "thisPartCount";
       public static final String location = "location";
       public static final String lotAchat = "lotAchat";
+      public static final String mainBoxId = "mainBoxId";
+      public static final String mainBox = "mainBox";
       private Long m_id;
       private String m_label;
       private Integer m_thisPartCount;
       private Long m_location;
       private Boolean m_lotAchat;
+      private Long m_mainBoxId;
+      private String m_mainBox;
 
       public Long getId() {
         return m_id;
@@ -237,6 +241,22 @@ public class PartFormData extends AbstractFormData {
 
       public void setLotAchat(Boolean newLotAchat) {
         m_lotAchat = newLotAchat;
+      }
+
+      public Long getMainBoxId() {
+        return m_mainBoxId;
+      }
+
+      public void setMainBoxId(Long newMainBoxId) {
+        m_mainBoxId = newMainBoxId;
+      }
+
+      public String getMainBox() {
+        return m_mainBox;
+      }
+
+      public void setMainBox(String newMainBox) {
+        m_mainBox = newMainBox;
       }
     }
   }

@@ -38,6 +38,7 @@ import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractCancelButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractLinkButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
+import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractSaveButton;
 import org.eclipse.scout.rt.client.ui.form.fields.decimalfield.AbstractDecimalField;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.IGroupBoxBodyGrid;
@@ -80,6 +81,7 @@ import pers.mr.ft.inventory.client.forms.PartForm.MainBox.GroupBox.PartFieldsBox
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.GroupBox.PartsField;
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.OkButton;
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.OpenBoxesMenu;
+import pers.mr.ft.inventory.client.forms.PartForm.MainBox.SaveButton;
 import pers.mr.ft.inventory.client.forms.PartForm.MainBox.SyncButton;
 import pers.mr.ft.inventory.shared.codetype.CategoryCodeType;
 import pers.mr.ft.inventory.shared.codetype.ColorCodeType;
@@ -239,6 +241,10 @@ public class PartForm extends AbstractForm {
     return getFieldByClass(KitsField.class);
   }
 
+  public SaveButton getSaveButton() {
+    return getFieldByClass(SaveButton.class);
+  }
+
   public OkButton getOkButton() {
     return getFieldByClass(OkButton.class);
   }
@@ -255,6 +261,11 @@ public class PartForm extends AbstractForm {
       @Override
       protected Class<? extends IGroupBoxBodyGrid> getConfiguredBodyGrid() {
         return HorizontalGroupBoxBodyGrid.class;
+      }
+      
+      @Override
+      protected int getConfiguredGridColumnCount() {
+        return 10;
       }
       
       @Order(0)
@@ -288,7 +299,7 @@ public class PartForm extends AbstractForm {
         
         @Override
         protected int getConfiguredGridW() {
-          return 2;
+          return 10;
         }
         @Override
         protected double getConfiguredGridWeightY() {
@@ -763,6 +774,14 @@ public class PartForm extends AbstractForm {
             return getColumnSet().getColumnByClass(LotAchatColumn.class);
           }
 
+          public MainBoxIdColumn getMainBoxIdColumn() {
+            return getColumnSet().getColumnByClass(MainBoxIdColumn.class);
+          }
+
+          public MainBoxColumn getMainBoxColumn() {
+            return getColumnSet().getColumnByClass(MainBoxColumn.class);
+          }
+
           public ThisPartCountColumn getThisPartCountColumn() {
             return getColumnSet().getColumnByClass(ThisPartCountColumn.class);
           }
@@ -886,6 +905,34 @@ public class PartForm extends AbstractForm {
               return 10;
             }
           }
+
+
+          @Order(6000)
+          public class MainBoxIdColumn extends AbstractLongColumn {
+            @Override
+            protected String getConfiguredHeaderText() {
+              return TEXTS.get("MainBoxId");
+            }
+
+            @Override
+            protected int getConfiguredWidth() {
+              return 70;
+            }
+          }
+
+
+          @Order(7000)
+          public class MainBoxColumn extends AbstractStringColumn {
+            @Override
+            protected String getConfiguredHeaderText() {
+              return TEXTS.get("MainBox");
+            }
+
+            @Override
+            protected int getConfiguredWidth() {
+              return 120;
+            }
+          }
           
           
           
@@ -916,7 +963,7 @@ public class PartForm extends AbstractForm {
 
         @Override
         protected int getConfiguredGridW() {
-          return 1;
+          return 6;
         }
         @Override
         protected String getConfiguredLabel() {
@@ -1081,7 +1128,7 @@ public class PartForm extends AbstractForm {
         }
         @Override
         protected int getConfiguredGridW() {
-          return 1;
+          return 4;
         }
         @Override
         protected double getConfiguredGridWeightY() {
@@ -1126,6 +1173,12 @@ public class PartForm extends AbstractForm {
     public class CancelButton extends AbstractCancelButton {
 
     }
+
+    @Order(3500)
+    public class SaveButton extends AbstractSaveButton {
+    }
+    
+    
 
     @Order(4000)
     public class SyncButton extends AbstractButton {
