@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pers.mr.ft</groupId>
   <artifactId>inventory-root</artifactId>
-  <version>1.11.0-SNAPSHOT</version>
+  <version>1.12.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Invenory ROOT Module</name>
   <build>
