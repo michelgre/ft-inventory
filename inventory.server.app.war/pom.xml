@@ -36,6 +36,7 @@
               <target>
                 <echo>Projet ${project.name}</echo>
                 <copy file="target/inventory-server-${project.version}.war" tofile="${basedir}/dist/inventory-server-${project.version}.war"/>
+                <copy file="target/inventory-server-${project.version}.war" tofile="${basedir}/../inventory/dist/current/inventory-server.war"/>
                 <!-- 
                 <copy todir="${basedir}/dist/conf">
                   <fileset dir="conf-default"/>
