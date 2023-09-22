@@ -14,6 +14,9 @@ import org.eclipse.scout.rt.platform.util.ImmutablePair;
 import org.eclipse.scout.rt.platform.util.Pair;
 import org.eclipse.scout.rt.security.ACCESS;
 import org.eclipse.scout.rt.server.jdbc.SQL;
+import org.eclipse.scout.rt.shared.data.basic.table.AbstractTableRowData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pers.mr.ft.ftdbsync.FTDBSync;
 import pers.mr.ft.inventory.server.ServerSession;
@@ -24,12 +27,15 @@ import pers.mr.ft.inventory.shared.common.ILabelService;
 import pers.mr.ft.inventory.shared.forms.CreatePartPermission;
 import pers.mr.ft.inventory.shared.forms.IPartService;
 import pers.mr.ft.inventory.shared.forms.PartFormData;
+import pers.mr.ft.inventory.shared.forms.PartFormData.Parts;
+import pers.mr.ft.inventory.shared.forms.PartFormData.Parts.PartsRowData;
 import pers.mr.ft.inventory.shared.forms.ReadPartPermission;
 import pers.mr.ft.inventory.shared.forms.UpdatePartPermission;
 import pers.mr.ft.inventory.shared.model.Document;
 import pers.mr.ft.inventory.shared.security.FTPrincipal;
 
 public class PartService implements IPartService {
+  private static final Logger logger = LoggerFactory.getLogger(PartService.class);
   private FTDBSync ftdbSync = null;
   
   @Override
@@ -105,14 +111,14 @@ public class PartService implements IPartService {
         new NVPair("defaultLanguage", defaultLanguage));
     
     // Pièces incluses
-    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, pc.count, color_id, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0), pc.ftdb_count,pc.inv_sum " +
+    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, pc.count, color_id, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0), pc.ftdb_count,pc.inv_sum,pc.comment " +
         " FROM v_part_contains pc " +
         " JOIN part p ON p.id = pc.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +
         " LEFT JOIN multilingual_label l2 ON l2.id = p.title_id AND l2.langcode = :defaultLanguage " +
         " LEFT JOIN v_one_part_number pn ON pn.part_id = p.id " +
         " WHERE pc.container_id = :partId AND (pc.inv_user_id IS NULL OR pc.inv_user_id = :userId) " +
-        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.fTDBCount}, :{parts.inventoryCount}"
+        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.fTDBCount}, :{parts.inventoryCount}, :{parts.comment} "
     ;
     SQL.selectInto(partsQuery, 
         formData, 
@@ -242,6 +248,7 @@ public class PartService implements IPartService {
     oldFormData.setPartId(partId);
     oldFormData = load(oldFormData);
     
+    // N° (s) de la pièce
     savePartNumbers(formData, oldFormData);
     
     // Libellés
@@ -265,7 +272,86 @@ public class PartService implements IPartService {
             new NVPair("newLabelId", newLabelId), new NVPair("partId", partId));
       }
     }
+    
+    // Contenu
+    //  - nombre de pièces par article
+    //  - commentaire
+    // NB: pour l'instant on ne traite pas le cas d'ajout / suppression de pièce
+    Parts newParts = formData.getParts();
+    for (PartsRowData partRowData: newParts.getRows()) {
+      switch (partRowData.getRowState()) {
+      case AbstractTableRowData.STATUS_NON_CHANGED:
+        break; // RAS
+      case AbstractTableRowData.STATUS_DELETED:
+        logger.warn("Opération suppression de ligne dans le contenu d'une pièce non implémentée");
+        break;
+      case AbstractTableRowData.STATUS_INSERTED:
+        logger.warn("Opération ajout de ligne dans le contenu d'une pièce non implémentée");
+        break;
+      case AbstractTableRowData.STATUS_UPDATED:
+        Long rowPartId = partRowData.getId();
+        PartsRowData oldData = findRowDataByPartId(oldFormData.getParts(), rowPartId);
+        // Si le nombre de pièce a changé il faut voir si le nombre précédent est un nombre ftdb ou corrigé
+        // Il faut prendre ftdbCount dans la table lue en base car l'interface ne renvoie pas forcément
+        // la dernière valeur à jour si on a fait "Enregistrer"
+        Integer ftdbCount = oldData.getFTDBCount();
+
+        Integer count = partRowData.getCount();
+        String comment = partRowData.getComment();
+        
+        StringBuffer sb = new StringBuffer();
+        sb.append("UPDATE part_contains SET");
+        int changeCount = 0;
+        if (oldData!=null) {
+          Integer oldCount = oldData.getCount();
+          String oldComment = oldData.getComment();
+          
+          if (!count.equals(oldCount)) {
+            // Modification du nombre de pièces
+            if (ftdbCount==null) {
+              logger.debug("Correction initiale de # pièces de FTDB");
+              sb.append(" ftdb_count = :oldCount");
+              changeCount++;
+            }
+            if (changeCount>0) {
+              sb.append(",");
+            }
+            sb.append(" count = :newCount");
+            changeCount++;
+          }
+          // NB: l'un ou l'autre comment peut être nul
+          if (comment!=oldComment || (comment!=null && !comment.equals(oldComment))) {
+            if (changeCount>0) {
+              sb.append(",");
+            }
+            sb.append(" comment = :newComment");
+            changeCount++;
+          }
+          
+          if (changeCount>0) {
+            sb.append(" WHERE container_id = :containerId AND part_id = :partId");
+            logger.info("Mise à jour contenu de "+partId+" avec: "+count+" x "+rowPartId+", comment="+comment);
+            SQL.update(sb.toString(), new NVPair("containerId", partId), new NVPair("partId", rowPartId), new NVPair("oldCount", oldCount), new NVPair("newCount", count), new NVPair("newComment", comment));
+          }
+        }
+        else {
+          // Remplacement d'une pièce par une autre ?
+          logger.warn("Opération remplacement de pièce dans le contenu d'une pièce non implémentée");
+        }
+        
+      }
+    }
+    
     return formData;
+  }
+  
+  private PartsRowData findRowDataByPartId(Parts parts, Long partId) {
+    for (PartsRowData partRowData: parts.getRows()) {
+      if (partRowData.getId().equals(partId)) {
+        return partRowData;
+      }
+    }
+    return null;
   }
   
   @Override

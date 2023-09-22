@@ -107,7 +107,7 @@ public class BoxService implements IBoxService {
         " INTO :id, :label, :boxType, :description, :parent, :location, :color, :length, :width, :height, :remarks, :model, :boughtSet, :given, :buyCost, :full ";
     SQL.selectInto(query, formData);
     
-    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, bc.count, pc.count, p.color_id, COALESCE (p.cost, 0.0), COALESCE (bc.count * p.cost, 0.0), bc.bin_id, pc.ftdb_count, inv_sum " +
+    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, bc.count, pc.count, p.color_id, COALESCE (p.cost, 0.0), COALESCE (bc.count * p.cost, 0.0), bc.bin_id, pc.ftdb_count, inv_sum, bc.comment " +
         " FROM v_box_contains_with_inv bc " +
         " JOIN part p ON p.id = bc.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +
@@ -116,7 +116,7 @@ public class BoxService implements IBoxService {
         " LEFT JOIN box container on container.id = bc.bin_id " +
         " LEFT JOIN part_contains pc ON pc.container_id = COALESCE(container.model_id,:model) AND p.id = pc.part_id " +
         " WHERE bc.container_id = :boxId AND (bc.inv_user_id = :userId OR bc.inv_user_id IS NULL) " +
-        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.kitCount}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.bin}, :{parts.fTDBCount}, :{parts.inventoryCount}"
+        " INTO :{parts.oldId}, :{parts.id}, :{parts.partNumber}, :{parts.partLabel}, :{parts.icon}, :{parts.count}, :{parts.kitCount}, :{parts.color}, :{parts.partValue}, :{parts.value}, :{parts.bin}, :{parts.fTDBCount}, :{parts.inventoryCount}, :{parts.comment} "
     ;
     SQL.selectInto(partsQuery, 
         formData, 
@@ -279,14 +279,14 @@ public class BoxService implements IBoxService {
         break;
       case AbstractTableRowData.STATUS_INSERTED:
         if (isGT0(partData.getId())) {
-          SQL.insert("INSERT INTO box_contains (container_id, part_id, count) VALUES (:boxId, :id, :count)", 
+          SQL.insert("INSERT INTO box_contains (container_id, part_id, count, comment) VALUES (:boxId, :id, :count, :comment)", 
               partData,
               new NVPair("boxId", actualContainerId));
         }
         break;
       case AbstractTableRowData.STATUS_UPDATED:
         if (isGT0(partData.getId())) {
-          SQL.update("UPDATE box_contains SET part_id = :id, count = :count WHERE container_id = :boxId AND part_id = :oldId", 
+          SQL.update("UPDATE box_contains SET part_id = :id, count = :count, comment = :comment WHERE container_id = :boxId AND part_id = :oldId", 
               partData,
               new NVPair("boxId", actualContainerId));
         }

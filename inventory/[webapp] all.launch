@@ -3,7 +3,7 @@
     <stringAttribute key="org.eclipse.debug.core.launchGroup.0.action" value="OUTPUT_REGEXP"/>
     <stringAttribute key="org.eclipse.debug.core.launchGroup.0.actionParam" value="Built at:"/>
     <booleanAttribute key="org.eclipse.debug.core.launchGroup.0.adoptIfRunning" value="true"/>
-    <booleanAttribute key="org.eclipse.debug.core.launchGroup.0.enabled" value="false"/>
+    <booleanAttribute key="org.eclipse.debug.core.launchGroup.0.enabled" value="true"/>
     <stringAttribute key="org.eclipse.debug.core.launchGroup.0.mode" value="run"/>
     <stringAttribute key="org.eclipse.debug.core.launchGroup.0.name" value="js build"/>
     <stringAttribute key="org.eclipse.debug.core.launchGroup.1.action" value="DELAY"/>

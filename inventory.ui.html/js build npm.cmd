@@ -24,6 +24,9 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 echo npm install finished successfully!
 echo.
 
+:: Erreur '0308010C:digital envelope routines::unsupported'
+SET NODE_OPTIONS=--openssl-legacy-provider
+
 :: Build the JavaScript and CSS bundles and start the watcher => creates the dist folder
 echo Running 'npm build:dev:watch'
 call npm run build:dev:watch

@@ -34,6 +34,10 @@ echo pnpm install finished successfully!
 echo.
 
 :: Build the JavaScript and CSS bundles and start the watcher => creates the dist folder
+
+:: Erreur '0308010C:digital envelope routines::unsupported'
+SET NODE_OPTIONS=--openssl-legacy-provider
+
 cd inventory.ui.html
 echo Running 'pnpm build:dev:watch'
 call pnpm run build:dev:watch

@@ -1,5 +1,5 @@
 @ECHO OFF
-SET TOMCAT=\\QNAP2\home\Tomcat9
+SET TOMCAT=\\QNAP2\Tomcat
 SET WEBAPPS=%TOMCAT%\webapps
 
 SET ROOTDIR=%~dp0..\

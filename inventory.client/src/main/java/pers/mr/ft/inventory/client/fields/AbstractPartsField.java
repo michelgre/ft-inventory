@@ -434,6 +434,9 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
     public InventoryCountColumn getInventoryCountColumn() {
       return getColumnSet().getColumnByClass(InventoryCountColumn.class);
     }
+    public CommentColumn getCommentColumn() {
+      return getColumnSet().getColumnByClass(CommentColumn.class);
+    }
     public OldIdColumn getOldIdColumn() {
       return getColumnSet().getColumnByClass(OldIdColumn.class);
     }
@@ -796,6 +799,25 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
       @Override
       protected int getConfiguredWidth() {
         return 75;
+      }
+    }
+
+
+    @Order(9000)
+    public class CommentColumn extends AbstractStringColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("Commentaire");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 100;
+      }
+      
+      @Override
+      protected boolean getConfiguredEditable() {
+        return true;
       }
     }
 
