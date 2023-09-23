@@ -1,6 +1,6 @@
 {
   "name": "@helloscout/root",
-  "version": "1.0.0-snapshot.20230922095355",
+  "version": "1.0.0-snapshot.20230923084911",
   "scripts": {
     "pnpm-install": "pnpm install --ignore-scripts"
   },

@@ -250,7 +250,7 @@ public class BoxService implements IBoxService {
     
     // Boite principale si on est en train de copier
     Long copiedId = formData.getCopiedId();
-    if (copiedId !=0L) {
+    if (copiedId != null && copiedId !=0L) {
       createdBinsIds.put(copiedId, boxId);
     }
     
