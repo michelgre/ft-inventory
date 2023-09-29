@@ -6,21 +6,21 @@
   <parent>
     <groupId>org.eclipse.scout</groupId>
     <artifactId>maven_rt_plugin_config-master</artifactId>
-    <version>3.14.1</version>
+    <version>23.2.0</version>
     <relativePath />
   </parent>
 
   <groupId>pers.mr.ft</groupId>
   <artifactId>inventory</artifactId>
-  <version>1.12.0-SNAPSHOT</version>
+  <version>1.12.0-23.2</version>
   <packaging>pom</packaging>
 
   <name>Inventory Parent Module</name>
 
   <properties>
     <pers.mr.ft.inventory.version>${project.version}</pers.mr.ft.inventory.version>
-    <jdk.source.version>8</jdk.source.version>
-    <org.eclipse.scout.rt.version>11.0.36</org.eclipse.scout.rt.version>
+    <jdk.source.version>17</jdk.source.version>
+    <org.eclipse.scout.rt.version>23.2.4</org.eclipse.scout.rt.version>
     <master_npm_release_dependency_mapping>--mapping.0.regex=@eclipse-scout --mapping.0.version=${org.eclipse.scout.rt.version}</master_npm_release_dependency_mapping>
     <tomcat.dir>//QNAP2/Tomcat</tomcat.dir>
   </properties>

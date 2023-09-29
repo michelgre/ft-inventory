@@ -1,15 +1,16 @@
 {
   "name": "@inventory/ui",
-  "version": "1.0.0-snapshot.20230923084911",
+  "version": "1.0.0-SNAPSHOT",
   "engines": {
-    "node": ">=12.1.0",
-    "npm": ">=6.9.0",
-    "pnpm": ">=4"
+    "node": ">=18.12.1",
+    "npm": ">=9.1.1",
+    "pnpm": ">=7.16.0"
   },
-  "main": "./src/main/js/index.js",
+  "main": "./src/main/js/index.ts",
   "files": [
-    "dist",
-    "src/main/js"
+    "src/main/resources/WebContent",
+    "src/main/js",
+    "target/dist"
   ],
   "scripts": {
     "pnpm-install": "pnpm install --ignore-scripts",
@@ -20,22 +21,20 @@
     "build:prod": "scout-scripts build:prod",
     "build:all": "scout-scripts build:dev && scout-scripts build:prod",
     "build:dev:watch": "scout-scripts build:dev:watch",
-    "snapshot-cleanup": "releng-scripts snapshot-cleanup",
-    "snapshot-predependency": "releng-scripts snapshot-install-dependency",
-    "snapshot-postdependency": "releng-scripts snapshot-publish-dependency",
-    "release-predependency": "releng-scripts release-install-dependency",
-    "release-postdependency": "releng-scripts release-publish-dependency"
+    "cleanup:snapshots": "releng-scripts cleanup:snapshots",
+    "version:snapshot:dependencies": "releng-scripts version:snapshot:dependencies",
+    "version:snapshot": "releng-scripts version:snapshot",
+    "version:release:dependencies": "releng-scripts version:release:dependencies",
+    "version:release": "releng-scripts version:release"
   },
   "devDependencies": {
-    "@eclipse-scout/cli": "11.0.36",
-    "@eclipse-scout/releng": "^10.0.0",
-    "@eclipse-scout/eslint-config": "11.0.36",
-    "eslint": "7.9.0",
-    "babel-eslint": "10.1.0",
-    "eslint-plugin-babel": "5.3.1"
+    "@eclipse-scout/cli": "23.2.4",
+    "@eclipse-scout/releng": "^22.0.0",
+    "@eclipse-scout/tsconfig": "23.2.4",
+    "@types/jquery": "3.5.16"
   },
   "dependencies": {
-    "@eclipse-scout/core": "11.0.36",
-    "jquery": "3.5.1"
+    "@eclipse-scout/core": "23.2.4",
+    "jquery": "3.6.0"
   }
 }
