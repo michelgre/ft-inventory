@@ -1,5 +1,6 @@
 package pers.mr.ft.inventory.server.reports;
 
+import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -145,6 +146,16 @@ public class ReportService implements IReportService {
     }
     Map<String, String> reportParameters = reportModelService.getReportParameters(reportId);
     
+    // ========================================================================================
+    // Attention: Jasper liste les polices connues du système: 
+    //       GraphicsEnvironment.getAvailableFontFamilyNames()
+    // et cette méthode échoue sur les JRE > 8 car un fichier de configuration n'est plus livré.
+    // C'est son absence qui crée un NullPointerException. Il faut, après installation du JRE,
+    // créer le fichier : $JAVA_HOME/lib/fontconfig.properties:
+    //    version=1
+    //    sequence.allfonts=default
+    // Ce problème n'est toujours pas corrigé en Java 17 !!!
+    // ========================================================================================
     try {
       JasperReport jasperReport = JasperCompileManager.compileReport(reportModelStream);
       StringBuffer condition = new StringBuffer();
