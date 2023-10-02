@@ -14,6 +14,9 @@
 
   <name>Inventory Server</name>
 
+  <properties>
+	  <jasperreports.version>6.20.6</jasperreports.version>
+  </properties>
   <repositories>
       <repository>
           <id>local-maven-repo</id>
@@ -59,7 +62,7 @@
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
-      <version>6.17.0</version>
+      <version>${jasperreports.version}</version>
       <exclusions>
         <exclusion>
         <groupId>commons-logging</groupId>
@@ -70,7 +73,7 @@
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports-functions</artifactId>
-      <version>6.16.0</version>
+      <version>${jasperreports.version}</version>
       <exclusions>
         <exclusion>
         <groupId>commons-logging</groupId>
@@ -81,7 +84,7 @@
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports-fonts</artifactId>
-      <version>6.16.0</version>
+      <version>${jasperreports.version}</version>
       <exclusions>
         <exclusion>
         <groupId>commons-logging</groupId>
