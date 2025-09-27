@@ -6,9 +6,6 @@ import java.security.AccessController;
 import java.util.Base64;
 
 import javax.security.auth.Subject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.context.CorrelationId;
@@ -21,6 +18,9 @@ import org.eclipse.scout.rt.shared.ui.UserAgent;
 import org.eclipse.scout.rt.shared.ui.UserAgents;
 import org.eclipse.scout.rt.ui.html.UiServlet;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import pers.mr.ft.inventory.shared.images.IImageService;
 
 public class IconServlet extends UiServlet {

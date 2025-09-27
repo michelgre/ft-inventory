@@ -1,10 +1,10 @@
 package pers.mr.ft.inventory.shared.forms;
 
-import javax.annotation.Generated;
-
 import org.eclipse.scout.rt.shared.data.basic.table.AbstractTableRowData;
 import org.eclipse.scout.rt.shared.data.form.fields.AbstractValueFieldData;
 import org.eclipse.scout.rt.shared.data.form.fields.tablefield.AbstractTableFieldBeanData;
+
+import jakarta.annotation.Generated;
 
 /**
  * <b>NOTE:</b><br>

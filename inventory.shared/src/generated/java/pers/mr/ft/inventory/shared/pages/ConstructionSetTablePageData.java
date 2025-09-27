@@ -1,8 +1,8 @@
 package pers.mr.ft.inventory.shared.pages;
 
-import javax.annotation.Generated;
-
 import org.eclipse.scout.rt.shared.data.basic.table.AbstractTableRowData;
+
+import jakarta.annotation.Generated;
 
 /**
  * <b>NOTE:</b><br>

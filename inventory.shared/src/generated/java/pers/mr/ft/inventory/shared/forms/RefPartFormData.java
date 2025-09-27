@@ -1,9 +1,10 @@
 package pers.mr.ft.inventory.shared.forms;
 
-import javax.annotation.Generated;
 
 import org.eclipse.scout.rt.shared.data.form.AbstractFormData;
 import org.eclipse.scout.rt.shared.data.form.properties.AbstractPropertyData;
+
+import jakarta.annotation.Generated;
 
 /**
  * <b>NOTE:</b><br>

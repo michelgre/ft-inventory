@@ -2,10 +2,10 @@ package pers.mr.ft.inventory.shared.pages;
 
 import java.util.Date;
 
-import javax.annotation.Generated;
-
 import org.eclipse.scout.rt.shared.data.basic.table.AbstractTableRowData;
 import org.eclipse.scout.rt.shared.data.page.AbstractTablePageData;
+
+import jakarta.annotation.Generated;
 
 /**
  * <b>NOTE:</b><br>

@@ -3,22 +3,19 @@ package pers.mr.ft.inventory.ui.html;
 import java.io.IOException;
 import java.security.Principal;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.http.auth.BasicUserPrincipal;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Bean;
-import org.eclipse.scout.rt.platform.security.ICredentialVerifier;
 import org.eclipse.scout.rt.platform.security.SimplePrincipal;
-import org.eclipse.scout.rt.platform.util.Pair;
 import org.eclipse.scout.rt.server.commons.authentication.IAccessController;
 import org.eclipse.scout.rt.server.commons.authentication.ServletFilterHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Bean
 public class PersistentSessionController implements IAccessController {
@@ -63,7 +60,7 @@ public class PersistentSessionController implements IAccessController {
 
     // OWASP: force a new HTTP session to be created.
     ServletFilterHelper helper = BEANS.get(ServletFilterHelper.class);
-    helper.invalidateSessionAfterLogin(request);
+    helper.invalidateSessionForLogin(request);
 
     // Put authenticated principal onto (new) HTTP session
     final Principal principal = new SimplePrincipal(principalName);

@@ -1,31 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.eclipse.scout</groupId>
+    <artifactId>maven_rt_plugin_config-master</artifactId>
+    <version>25.1.2</version>
+    <relativePath/>
+  </parent>
   <groupId>pers.mr.ft</groupId>
   <artifactId>inventory-root</artifactId>
-  <version>1.12.0-23.2</version>
+  <version>1.12.0-25.1</version>
   <packaging>pom</packaging>
-  <name>Inventory ROOT Module</name>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.2</version>
-        <inherited>false</inherited>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <version>2.5.2</version>
-        <inherited>false</inherited>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <modules><module>inventory</module></modules>
+  <modules>
+    <module>inventory</module>
+  </modules>
 </project>

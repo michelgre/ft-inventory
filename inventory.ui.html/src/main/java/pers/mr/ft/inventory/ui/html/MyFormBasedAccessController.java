@@ -2,10 +2,6 @@ package pers.mr.ft.inventory.ui.html;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.eclipse.scout.rt.platform.Bean;
 import org.eclipse.scout.rt.platform.Replace;
 import org.eclipse.scout.rt.platform.util.ImmutablePair;
@@ -14,6 +10,10 @@ import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.server.commons.authentication.FormBasedAccessController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Bean
 @Replace

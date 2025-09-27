@@ -2,9 +2,9 @@
   "name": "@inventory/ui",
   "version": "1.0.0-SNAPSHOT",
   "engines": {
-    "node": ">=18.12.1",
-    "npm": ">=9.1.1",
-    "pnpm": ">=7.16.0"
+    "node": ">=22.12.0",
+    "npm": ">=10.9.0",
+    "pnpm": ">=9.15.0"
   },
   "main": "./src/main/js/index.ts",
   "files": [
@@ -28,13 +28,13 @@
     "version:release": "releng-scripts version:release"
   },
   "devDependencies": {
-    "@eclipse-scout/cli": "23.2.4",
-    "@eclipse-scout/releng": "^22.0.0",
-    "@eclipse-scout/tsconfig": "23.2.4",
-    "@types/jquery": "3.5.16"
+    "@eclipse-scout/cli": "25.1.14",
+    "@eclipse-scout/releng": "^25.1.0",
+    "@eclipse-scout/tsconfig": "25.1.14",
+    "@types/jquery": "3.5.32"
   },
   "dependencies": {
-    "@eclipse-scout/core": "23.2.4",
-    "jquery": "3.6.0"
+    "@eclipse-scout/core": "25.1.14",
+    "jquery": "3.7.1"
   }
 }

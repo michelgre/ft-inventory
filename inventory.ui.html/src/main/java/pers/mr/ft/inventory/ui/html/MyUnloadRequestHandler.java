@@ -2,15 +2,14 @@ package pers.mr.ft.inventory.ui.html;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.eclipse.scout.rt.platform.Replace;
 import org.eclipse.scout.rt.ui.html.json.UnloadRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /*
  * Résolution du problème erreur 404 sur /unload après une session expirée: apparemment

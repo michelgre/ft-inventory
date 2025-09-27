@@ -3,10 +3,6 @@ package pers.mr.ft.inventory.ui.html;
 import java.io.IOException;
 import java.security.Principal;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.security.ICredentialVerifier;
 import org.eclipse.scout.rt.platform.util.Pair;
@@ -14,6 +10,10 @@ import org.eclipse.scout.rt.server.commons.authentication.FormBasedAccessControl
 import org.eclipse.scout.rt.server.commons.authentication.ServletFilterHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class TestFormBasedAccessController extends FormBasedAccessController {
   private static final Logger LOG = LoggerFactory.getLogger(TestFormBasedAccessController.class);
@@ -49,7 +49,7 @@ public class TestFormBasedAccessController extends FormBasedAccessController {
     // OWASP: force a new HTTP session to be created.
     ServletFilterHelper helper = BEANS.get(ServletFilterHelper.class);
     LOG.info("handleAuthRequest helper="+helper);
-    helper.invalidateSessionAfterLogin(request);
+    helper.invalidateSessionForLogin(request);
 
     // Put authenticated principal onto (new) HTTP session
     final Principal principal = m_config.getPrincipalProducer().produce(username);

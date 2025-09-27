@@ -1,8 +1,6 @@
 package pers.mr.ft.inventory.shared.forms;
 
-import org.eclipse.scout.rt.security.AbstractPermission;
-
-public class CreatePartPermission extends AbstractPermission {
+public class CreatePartPermission extends AbstractInventoryPermission {
   private static final long serialVersionUID = 1L;
 
   public CreatePartPermission() {
