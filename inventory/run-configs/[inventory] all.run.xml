@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[inventory] all" type="CompoundRunConfigurationType">
+    <toRun name="[inventory] dev server" type="Application" />
+    <toRun name="[inventory] dev ui" type="Application" />
+    <toRun name="js build" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>
