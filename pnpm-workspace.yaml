@@ -1,0 +1,3 @@
+packages:
+- '.'
+- 'inventory.ui.html'
