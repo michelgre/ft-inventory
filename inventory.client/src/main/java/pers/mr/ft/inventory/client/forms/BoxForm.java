@@ -1088,7 +1088,7 @@ public class BoxForm extends AbstractForm {
                 // Icone: on récupère l'id
                 Long iconId = partData.getImageId();
                 if (iconId != null && iconId>0) {
-                  getIconColumn().setValue(row, "icons/?image=" + iconId);
+                  getIconColumn().setValue(row, "icons?image=" + iconId);
                 }
               }
               else {

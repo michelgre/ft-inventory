@@ -107,7 +107,7 @@ public class BoxService implements IBoxService {
         " INTO :id, :label, :boxType, :description, :parent, :location, :color, :length, :width, :height, :remarks, :model, :boughtSet, :given, :buyCost, :full ";
     SQL.selectInto(query, formData);
     
-    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, bc.count, pc.count, p.color_id, COALESCE (p.cost, 0.0), COALESCE (bc.count * p.cost, 0.0), bc.bin_id, pc.ftdb_count, inv_sum, bc.comment " +
+    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons?image=' || p.ft_icon, bc.count, pc.count, p.color_id, COALESCE (p.cost, 0.0), COALESCE (bc.count * p.cost, 0.0), bc.bin_id, pc.ftdb_count, inv_sum, bc.comment " +
         " FROM v_box_contains_with_inv bc " +
         " JOIN part p ON p.id = bc.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +
@@ -159,7 +159,7 @@ public class BoxService implements IBoxService {
     formData.getColor().setValue(partData.getColor().getValue());
     
     // Contenu
-    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, pc.count, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0) " +
+    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons?image=' || p.ft_icon, pc.count, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0) " +
         " FROM part_contains pc " +
         " JOIN part p ON p.id = pc.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +

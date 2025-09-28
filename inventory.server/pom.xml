@@ -44,21 +44,17 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <!-- Inclus dans scout.rt 
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20200518</version>
     </dependency>
+    -->
     <dependency>
       <groupId>org.eclipse.scout.rt</groupId>
       <artifactId>org.eclipse.scout.rt.server.jdbc</artifactId>
     </dependency>
-	<dependency>
-	    <groupId>org.postgresql</groupId>
-	    <artifactId>postgresql</artifactId>
-	    <version>42.2.18</version>
-      <exclusions></exclusions>
-	</dependency>
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
@@ -67,6 +63,10 @@
         <exclusion>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+        	<groupId>commons-beanutils</groupId>
+        	<artifactId>commons-beanutils</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

@@ -80,7 +80,7 @@ public class DocumentService implements IDocumentService {
         " INTO :id, :fTDBId, :partNumber, :year, :fTDBName, :name, :lang, :extension", 
         formData);
     
-    SQL.select("SELECT dp.part_id, dp.part_id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon " +
+    SQL.select("SELECT dp.part_id, dp.part_id, pn.year_number, COALESCE(l1.label, l2.label), 'icons?image=' || p.ft_icon " +
         " FROM doc_part dp " +
         " JOIN part p ON p.id = dp.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +

@@ -27,7 +27,7 @@ public class MissingPartsService implements IMissingPartsService {
     SQL.selectInto(
         "SELECT box_id, box_label, bin_id, model_id, " + 
         " part_id, year_number, COALESCE(lt.label, part.label), " +
-        " 'icons/?image=' || p.ft_icon, " +
+        " 'icons?image=' || p.ft_icon, " +
         " count, kit_count, count - kit_count, part.color_id, " +
         " part.cost, part.cost * (kit_count - count), "+
         " part.inv_sum "+

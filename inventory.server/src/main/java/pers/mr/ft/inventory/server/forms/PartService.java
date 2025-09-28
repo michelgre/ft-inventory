@@ -96,7 +96,7 @@ public class PartService implements IPartService {
     }
     
     // TODO icone
-    // '/icons/?image=' || p.ft_icon, 
+    // '/icons?image=' || p.ft_icon, 
     String query = "SELECT p.id, pn.part_numbers, type_id, COALESCE(l1.label, l2.label), COALESCE(d1.label, d2.label), color_id, COALESCE(cost, 0.0), p.ft_icon, p.ft_cat, p.weight, p.ft_variant_uuid, p.rarity " +
         " FROM part p " +
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +
@@ -111,7 +111,7 @@ public class PartService implements IPartService {
         new NVPair("defaultLanguage", defaultLanguage));
     
     // Pièces incluses
-    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons/?image=' || p.ft_icon, pc.count, color_id, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0), pc.ftdb_count,pc.inv_sum,pc.comment " +
+    String partsQuery = "SELECT p.id, p.id, pn.year_number, COALESCE(l1.label, l2.label), 'icons?image=' || p.ft_icon, pc.count, color_id, COALESCE (p.cost, 0.0), COALESCE (pc.count * p.cost, 0.0), pc.ftdb_count,pc.inv_sum,pc.comment " +
         " FROM v_part_contains pc " +
         " JOIN part p ON p.id = pc.part_id " + 
         " LEFT JOIN multilingual_label l1 ON l1.id = p.title_id AND l1.langcode = :userLanguage " +
@@ -141,7 +141,7 @@ public class PartService implements IPartService {
         new NVPair("userId", userId));
     
     // Kits contenant
-    String kitsQuery = "SELECT k.id, COALESCE(l1.label, l2.label), 'icons/?image=' || k.ft_icon, kc.count " +
+    String kitsQuery = "SELECT k.id, COALESCE(l1.label, l2.label), 'icons?image=' || k.ft_icon, kc.count " +
         " FROM part_contains kc " +
         " JOIN part k ON k.id = kc.container_id " +
         " LEFT JOIN multilingual_label l1 ON l1.id = k.title_id AND l1.langcode = :userLanguage " +

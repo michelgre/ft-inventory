@@ -503,7 +503,7 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
           getColorColumn().setValue(row, partData.getColor().getValue());
           Long iconId = partData.getImageId();
           if (iconId != null && iconId.longValue() > 0L)
-            getIconColumn().setValue(row, "icons/?image=" + iconId); 
+            getIconColumn().setValue(row, "icons?image=" + iconId); 
         } else {
           getIdColumn().setValue(row, null);
           getPartLabelColumn().setValue(row, "");
@@ -881,7 +881,7 @@ public abstract class AbstractPartsField extends AbstractTableField<AbstractPart
         // Icone: on récupère l'id
         Long iconId = partData.getImageId();
         if (iconId != null && iconId>0) {
-          iconColumn.setValue(row, "icons/?image=" + iconId);
+          iconColumn.setValue(row, "icons?image=" + iconId);
         }
         
         // Couleur

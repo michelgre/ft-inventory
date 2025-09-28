@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.eclipse.jetty.ee10.servlet.FilterHolder;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.scout.rt.jetty.IServletContributor;
 import org.eclipse.scout.rt.jetty.IServletFilterContributor;
 import org.eclipse.scout.rt.platform.Replace;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.ui.html.app.UiServletContributors.AuthFilterContributor;
 
+import pers.mr.ft.inventory.ui.html.IconServlet;
 import pers.mr.ft.inventory.ui.html.UiServletFilter;
 
 /**
@@ -27,6 +29,7 @@ public final class UiServletContributors {
 
     @Override
     public void contribute(ServletContextHandler handler) {
+      handler.addServlet(new ServletHolder(new IconServlet()), "/icons");
       FilterHolder filter = handler.addFilter(UiServletFilter.class, "/*", null);
       filter.setInitParameter("filter-exclude", StringUtility.join("\n", getFilterExcludes()));
     }

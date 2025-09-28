@@ -19,10 +19,12 @@ import org.eclipse.scout.rt.shared.ui.UserAgents;
 import org.eclipse.scout.rt.ui.html.UiServlet;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import pers.mr.ft.inventory.shared.images.IImageService;
 
+@WebServlet(urlPatterns = "/icons")
 public class IconServlet extends UiServlet {
 
   /**

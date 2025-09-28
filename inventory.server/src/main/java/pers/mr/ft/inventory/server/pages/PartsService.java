@@ -75,7 +75,7 @@ public class PartsService implements IPartsService {
         " FROM v_parts_page p " + 
         cond +
         /*
-        " p.id, part_numbers, 'icons/?image=' || p.ft_icon, p.color_id, COALESCE(l1.label, l2.label), " + 
+        " p.id, part_numbers, 'icons?image=' || p.ft_icon, p.color_id, COALESCE(l1.label, l2.label), " + 
         " l2.label, p.ft_cat, (select sum(count) from part_contains where container_id = p.id) kit_sum, " +
         " (SELECT SUM (count) FROM box_contains bc JOIN box b ON bc.container_id = b.id WHERE NOT b.lot_achat AND part_id = p.id) inv_sum " +
         " FROM part p " +
