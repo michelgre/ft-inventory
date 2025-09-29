@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Bean
 @Replace
 public class MyFormBasedAccessController extends FormBasedAccessController {
+  @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(MyFormBasedAccessController.class);
   
   @Override

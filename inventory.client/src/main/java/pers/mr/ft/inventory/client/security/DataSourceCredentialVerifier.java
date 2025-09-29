@@ -21,12 +21,13 @@ public class DataSourceCredentialVerifier implements ICredentialVerifier {
     Subject subject = new Subject();
     subject.getPrincipals().add(new SimplePrincipal("system"));
     subject.setReadOnly();
-    RunContext runContext = RunContexts.empty();
+    RunContext runContext = RunContexts.copyCurrent(true).withSubject(subject);
     
     return runContext.call(new Callable<Integer>() {
          @Override
          public Integer call() throws Exception {
-           return BEANS.get(IAuthorizationService.class).verify(username, password);
+           IAuthorizationService service = BEANS.get(IAuthorizationService.class);
+           return service.verify(username, password);
          }
     });
   }

@@ -22,6 +22,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import pers.mr.ft.inventory.client.ClientSession;
 import pers.mr.ft.inventory.shared.images.IImageService;
 
 @WebServlet(urlPatterns = "/icons")
@@ -81,9 +82,9 @@ public class IconServlet extends UiServlet {
   @Override
   protected RunContext createServletRunContext(final HttpServletRequest req, final HttpServletResponse resp) {
     final String cid = req.getHeader(CorrelationId.HTTP_HEADER_NAME);
-
-    return RunContexts.copyCurrent(true)
-        .withSubject(Subject.getSubject(AccessController.getContext()))
+    RunContext runContext = RunContexts.copyCurrent(true);
+    return runContext
+        .withSubject(Subject.current())
         .withThreadLocal(IHttpServletRoundtrip.CURRENT_HTTP_SERVLET_REQUEST, req)
         .withThreadLocal(IHttpServletRoundtrip.CURRENT_HTTP_SERVLET_RESPONSE, resp)
         .withDiagnostics(BEANS.get(ServletDiagnosticsProviderFactory.class).getProviders(req, resp))
